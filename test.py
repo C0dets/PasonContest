@@ -15,8 +15,8 @@ def stateChannel():
     context = zmq.Context()
     stateChannel = context.socket(zmq.SUB)
     stateChannel.connect("tcp://ip-10-0-0-149.ec2.internal:%s" % statePort)
-    topicfilter = "10001"
-    stateChannel.setsockopt(zmq.SUBSCRIBE, topicfilter)
+    #topicfilter = "10001"
+    #stateChannel.setsockopt(zmq.SUBSCRIBE, topicfilter)
 
     print "Running state channel on port: ", statePort
 
@@ -26,7 +26,7 @@ def stateChannel():
         #total_value += int(messagedata)
         #print topic, messagedata
         state = stateChannel.recv()
-        print "Received state: %s" % message
+        print "Received state: %s" % state
          
 def commandChannel():
     print "hello2"
@@ -35,7 +35,7 @@ def commandChannel():
     commandChannel = context.socket(zmq.REQ)
     commandChannel.connect("tcp://ip-10-0-0-149.ec2.internal:%s" % commandPort)
     command = json.dumps({"comm_type" : "MatchConnect",
- "match_token" : "e44c5944-3e58-4b61-9f63-451562e6d7c3",
+ "match_token" : "a4fd9512-2a21-47c9-b946-70723a7016bb",
  "team_name" : "Codets",
  "password" : "theeleventhfrog"
 })
@@ -49,6 +49,7 @@ def commandChannel():
 
 
 if __name__ == "__main__":
+
     Process(target=stateChannel).start()
         
     Process(target=commandChannel).start()
