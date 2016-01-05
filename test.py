@@ -1,6 +1,7 @@
 import zmq
 import time
 import sys
+import json
 
 from  multiprocessing import Process
 
@@ -10,28 +11,39 @@ commandPort = "5557"
 statePort = "5556"
 
 def stateChannel():
+    print "hello1"
     context = zmq.Context()
     stateChannel = context.socket(zmq.SUB)
-    stateChannel.connect("tcp://localhost:%s" % statePort)
+    stateChannel.connect("tcp://ip-10-0-0-149.ec2.internal:%s" % statePort)
     topicfilter = "10001"
     stateChannel.setsockopt(zmq.SUBSCRIBE, topicfilter)
 
     print "Running state channel on port: ", statePort
 
-    while True:
+    while True:	
+        #string = stateChannel.recv()
+        #topic, messagedata = string.split()
+        #total_value += int(messagedata)
+        #print topic, messagedata
         state = stateChannel.recv()
         print "Received state: %s" % message
          
 def commandChannel():
+    print "hello2"
     context = zmq.Context()
     print "Starting up command channel on port %s" % commandPort
     commandChannel = context.socket(zmq.REQ)
-    commandChannel.connect("tcp://localhost:%s" % commandPort)
+    commandChannel.connect("tcp://ip-10-0-0-149.ec2.internal:%s" % commandPort)
+    command = json.dumps({"comm_type" : "MatchConnect",
+ "match_token" : "e44c5944-3e58-4b61-9f63-451562e6d7c3",
+ "team_name" : "Codets",
+ "password" : "theeleventhfrog"
+})
     while True:
-        print "Sending command"
-        command = "Hello"
+        print "Sending match connect command"
+        #command = "Hello"
         commandChannel.send(command)
-        message = socket.recv()
+        message = commandChannel.recv()
         print "Received reply ", "[", message, "]"
         time.sleep(1) 
 
