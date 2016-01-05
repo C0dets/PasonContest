@@ -39,7 +39,7 @@ def commandChannel():
  "team_name" : "Codets",
  "password" : "theeleventhfrog"
 })
-    commandChannel.send(matchConnectReq)
+    message = commandChannel.send(matchConnectReq)
     print "Received reply ", "[", message, "]"
     while True:
         print "Sending match connect command"
