@@ -9,12 +9,13 @@ from  multiprocessing import Process
 context = zmq.Context()
 
 class Comm:
-    def __init__(self, matchToken, commandServer, stateServer):
+    def __init__(self, matchToken, commandServer, stateServer, policy):
         self.matchToken = matchToken
 
         context = zmq.Context()
 
         self.commandChannel = context.socket(zmq.REQ)
+        print "tcp://%s:5557" % commandServer
         self.commandChannel.connect("tcp://%s:5557" % commandServer)
 
         self.stateChannel = context.socket(zmq.SUB)
@@ -31,8 +32,13 @@ class Comm:
              "password" : credentials.password
             })
         self.commandChannel.send(command)
-        message = self.commandChannel.recv()
-        print "Connection status: ", "[", message, "]"
+        message = json.loads(self.commandChannel.recv())
+        if (message["resp"] == "ok"):
+            print 'Conected!'
+            self.clientToken = message["client_token"]
+        else:
+            print 'Failed to connect. :('
+            print "Connection status: ", "[", message, "]"
 
 ##    def stateChannel():
 ##        while True:

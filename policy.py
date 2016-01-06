@@ -1,0 +1,2 @@
+def initial():
+    print 'initial'

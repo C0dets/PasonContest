@@ -4,3 +4,4 @@
 /sshRSA.ppk
 /pythonProj.psproj
 /credentials.py
+*.pyc
