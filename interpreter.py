@@ -22,12 +22,12 @@ class Interpreter:
         tank2 = self.tanks[tank2Id]
 
         ## Check if in range
-        distance = self.distance(tank1['position'], tank1['position'])
+        distance = self.distance(tank1['position'], tank2['position'])
         if (distance > projRange + hitRad):
             return False
 
         ## Check that we are pointing at it
-        angle = self.angleTo(tank1['position'], tank1['position'])
+        angle = self.angleTo(tank1['position'], tank2['position'])
         offset = math.asin(hitRad/distance)
         ## TODO consider offset negative problem
         if (tank1['turret'] > angle + offset or tank1['turret'] < angle - offset):
