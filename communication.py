@@ -40,12 +40,11 @@ class Comm:
             print 'Failed to connect. :('
             print "Connection status: ", message["message"]
 
-##    def stateChannel():
-##        while True:
-##            #string = stateChannel.recv()
-##            #topic, messagedata = string.split()
-##            #total_value += int(messagedata)
-##            #print topic, messagedata
-##            state = stateChannel.recv()
-##            print "Received state: %s" % message
+	def monitor(self):
+		while True:
+			[address, contents] = self.stateChannel.recv_multipart()
+    	    #print("[%s] %s\n" % (address, contents))
+			status = json.loads(contents)
+			policy(status, self)
+
 
