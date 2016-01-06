@@ -25,6 +25,8 @@ class Comm:
 
         self.matchConnect()
 
+		self.monitor()
+
     def matchConnect(self):
         print 'Connecting...'
         command = json.dumps({"comm_type" : "MatchConnect",
