@@ -6,7 +6,7 @@ class Interpreter:
         for player in status['players']:
             for tank in player['tanks']:
                 self.tanks[tank['id']] = tank
-                if tank['projectiles'].length > 0:
+                if len(tank['projectiles']) > 0:
                     print tank['type']
                     print tank['projectiles']
 
