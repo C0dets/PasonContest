@@ -23,13 +23,13 @@ class Interpreter:
         ## Check if in range
         distance = self.distance(tank1['position'], tank1['position'])
         if (distance > 100 + hitRad):
-            return false
+            return False
 
         ## Check that were not firing at self
 
         ## Check for obstacles
 
-        return true
+        return True
 
 
     def distance(self, point1, point2):
