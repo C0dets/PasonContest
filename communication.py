@@ -44,16 +44,15 @@ class Comm:
             print "Connection status: ", message["message"]
 
     def monitor(self):
+        latestStatus = 0
         while True:
-            lastMessage = null
-            while True:
-                try:
-                    [address, contents] = self.stateChannel.recv_multipart(zmq.NOBLOCK)
-                    latestStatus = json.loads(contents)
-                    print "Received status"
-                    #print("[%s] %s\n" % (address, contents))
-                except zmq.ZMQError:
+            try:
+                [address, contents] = self.stateChannel.recv_multipart(zmq.NOBLOCK)
+                latestStatus = json.loads(contents)
+                print "Received status"
+                #print("[%s] %s\n" % (address, contents))
+            except zmq.ZMQError:
+                if(latestStatus):
                     policy(latestStatus, self)
-                    break
 
 
