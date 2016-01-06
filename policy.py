@@ -1,7 +1,23 @@
+import credentials
+
 from interpreter import Interpreter
 
 def initial(status, comm):
-    Interpreter(status)
+    intp = Interpreter(status)
+
+    myTanks = []
+    enemyTanks = []
+
+    for player in status['players']:
+        if (player['name'] == credentials.username):
+            myTanks = player['tanks']
+        else:
+            enemyTanks.append(player['tanks'])
+
+    for myTank in myTanks:
+        for enemyTank in enemyTanks:
+            if (intp.inRange(myTank['id'], enemyTank['id'])):
+                comm.fire(myTank['id'])
 
 ##    Check if any tank can be attacked
 

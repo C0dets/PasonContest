@@ -1,24 +1,41 @@
+import math
+
+hitRad = 2
+colRad = 2
+
 class Interpreter:
     def __init__(self, status):
         self.mapSize = status['map']['size']
         self.mapTerrain = status['map']['terrain']
         self.tanks = {}
+        self.projectiles = {}
         for player in status['players']:
             for tank in player['tanks']:
                 self.tanks[tank['id']] = tank
-                if len(tank['projectiles']) > 0:
-                    print tank['type']
-                    print tank['projectiles']
+                for projectile in tank['projectiles']:
+                    self.tanks[tank['id']] = tank
 
 
-def inRange(tank1, tank2):
-    print 'inRangeCall'
+def inRange(tank1Id, tank2Id):
+    tank1 = self.tanks[tank1Id]
+    tank2 = self.tanks[tank2Id]
 
-##    Check if any tank can be attacked
+    ## Check if in range
+    distance = self.distance(tank1['position'], tank1['position'])
+    if (distance > 100 + hitRad):
+        return false
 
-##    Check if any tank is in danger, move away  (Do predictive calculations by observing past status and extrapolating?)
+    ## Check that were not firing at self
 
-##    For each opponenet tank, find own tank that is closest, and assign opponent to own tank and move agressively
+    ## Check for obstacles
+
+    return true
+
+
+def distance(point1, point2):
+    xDist = point1[0] - point2[0]
+    yDist = point1[1] - point2[1]
+    return math.sqrt((xDist * xDist) + (yDist * yDist))
 
 
 
