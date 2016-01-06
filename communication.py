@@ -34,11 +34,11 @@ class Comm:
         self.commandChannel.send(command)
         message = json.loads(self.commandChannel.recv())
         if (message["resp"] == "ok"):
-            print 'Conected!'
+            print 'Conected to match!'
             self.clientToken = message["client_token"]
         else:
             print 'Failed to connect. :('
-            print "Connection status: ", "[", message, "]"
+            print "Connection status: ", message["message"]
 
 ##    def stateChannel():
 ##        while True:
