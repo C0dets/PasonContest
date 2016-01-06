@@ -12,7 +12,7 @@ def initial(status, comm):
         if (player['name'] == credentials.username):
             myTanks = player['tanks']
         else:
-            enemyTanks.append(player['tanks'])
+            enemyTanks += player['tanks']
 
     for myTank in myTanks:
         for enemyTank in enemyTanks:
