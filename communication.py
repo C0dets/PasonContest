@@ -64,74 +64,52 @@ class Comm:
                     except:
                         print "Unexpected error:", traceback.format_exc()
 
+    def sendCommand(self, command):
+        command["client_token"] = self.clientToken
+        self.commandChannel.send(json.dumps(command))
+        message = json.loads(self.commandChannel.recv())
+        if (message["comm_type"] == "ErrorResp"):
+            print command
+            print message
+
     def move(self, tankId, direction, distance):
-        command = json.dumps({
+        command = {
             "tank_id" : tankId,
             "comm_type" : "MOVE",
             "direction" : direction,
-            "distance" : str(distance),
-            "client_token" : self.clientToken
-            })
-        self.commandChannel.send(command)
-        message = json.loads(self.commandChannel.recv())
-        if (message["comm_type"] != "MoveResp" or "resp" not in message or message["resp"] != "ok"):
-            print "Move failed"
-            print message
-
+            "distance" : str(distance)
+            }
+        self.sendCommand(command)
 
     def rotateTank(self, tankId, direction, rads):
-        command = json.dumps({
+        command = {
             "tank_id" : tankId,
             "comm_type" : "ROTATE",
             "direction" : direction,
-            "rads" : str(rads),
-            "client_token" : self.clientToken
-            })
-        self.commandChannel.send(command)
-        message = json.loads(self.commandChannel.recv())
-        if (message["comm_type"] != "MoveResp" or "resp" not in message or message["resp"] != "ok"):
-            print command
-            print "Tank rotation failed"
-            print message
+            "rads" : str(rads)
+            }
+        self.sendCommand(command)
 
     def rotateTurret(self, tankId, direction, rads):
-        command = json.dumps({
+        command = {
             "tank_id" : tankId,
             "comm_type" : "ROTATE_TURRET",
             "direction" : direction,
-            "rads" : str(rads),
-            "client_token" : self.clientToken
-            })
-        self.commandChannel.send(command)
-        message = json.loads(self.commandChannel.recv())
-        if (message["comm_type"] != "MoveResp" or "resp" not in message or message["resp"] != "ok"):
-            print command
-            print "Turret rotation failed"
-            print message
+            "rads" : str(rads)
+            }
+        self.sendCommand(command)
 
     def fire(self, tankId):
-        command = json.dumps({
+        command = {
             "tank_id" : tankId,
-            "comm_type" : "FIRE",
-            "client_token" : self.clientToken
-            })
-        self.commandChannel.send(command)
-        message = json.loads(self.commandChannel.recv())
-        if (message["comm_type"] != "MoveResp" or "resp" not in message or message["resp"] != "ok"):
-            print command
-            print "Fire failed"
-            print message
+            "comm_type" : "FIRE"
+            }
+        self.sendCommand(command)
 
-    def stop(self, tankId, command):
-        command = json.dumps({
+    def stop(self, tankId, control):
+        command = {
             "tank_id" : tankId,
             "comm_type" : "STOP",
-            "control" : command,
-            "client_token" : self.clientToken
-            })
-        self.commandChannel.send(command)
-        message = json.loads(self.commandChannel.recv())
-        if (message["comm_type"] != "MoveResp" or "resp" not in message or message["resp"] != "ok"):
-            print command
-            print "Stopping failed"
-            print message
+            "control" : control
+            }
+        self.sendCommand(command)
