@@ -11,6 +11,7 @@ context = zmq.Context()
 
 class Comm:
     def __init__(self, matchToken, commandServer, stateServer, policy):
+        self.policy = policy
         self.matchToken = matchToken
 
         context = zmq.Context()
@@ -43,17 +44,16 @@ class Comm:
             print 'Failed to connect. :('
             print "Connection status: ", message["message"]
 
-	def monitor(self):
-		while True:
-			lastMessage = null
-			while True:
-				try:
-					[address, contents] = self.stateChannel.recv_multipart(zmq.NOBLOCK)
-					latestStatus = json.loads(contents)
-					print "Received status"
-			    	#print("[%s] %s\n" % (address, contents))
-				except zmq.ZMQError:
-					policy(latestStatus, self)
-					break
+    def monitor(self):
+        latestStatus = 0
+        while True:
+            try:
+                [address, contents] = self.stateChannel.recv_multipart(zmq.NOBLOCK)
+                latestStatus = json.loads(contents)
+                print "Received status"
+                #print("[%s] %s\n" % (address, contents))
+            except zmq.ZMQError:
+                if(latestStatus):
+                    self.policy(latestStatus, self)
 
 
