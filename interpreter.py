@@ -16,7 +16,7 @@ class Interpreter:
                     self.tanks[tank['id']] = tank
 
 
-    def inRange(tank1Id, tank2Id):
+    def inRange(self, tank1Id, tank2Id):
         tank1 = self.tanks[tank1Id]
         tank2 = self.tanks[tank2Id]
 
@@ -32,7 +32,7 @@ class Interpreter:
         return true
 
 
-    def distance(point1, point2):
+    def distance(self, point1, point2):
         xDist = point1[0] - point2[0]
         yDist = point1[1] - point2[1]
         return math.sqrt((xDist * xDist) + (yDist * yDist))
