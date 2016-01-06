@@ -11,6 +11,7 @@ context = zmq.Context()
 
 class Comm:
     def __init__(self, matchToken, commandServer, stateServer, policy):
+        self.policy = policy
         self.matchToken = matchToken
 
         context = zmq.Context()
@@ -53,6 +54,6 @@ class Comm:
                 #print("[%s] %s\n" % (address, contents))
             except zmq.ZMQError:
                 if(latestStatus):
-                    policy(latestStatus, self)
+                    self.policy(latestStatus, self)
 
 
