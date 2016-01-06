@@ -31,7 +31,7 @@ class Comm:
              "password" : credentials.password
             })
         self.commandChannel.send(command)
-        message = commandChannel.recv()
+        message = self.commandChannel.recv()
         print "Connection status: ", "[", message, "]"
 
 ##    def stateChannel():
