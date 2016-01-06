@@ -46,7 +46,7 @@ class Comm:
 			lastMessage = null
 			while True:
 				try:
-					[address, contents] = self.stateChannel.recv_multipart()
+					[address, contents] = self.stateChannel.recv_multipart(zmq.NOBLOCK)
 					latestStatus = json.loads(contents)
 					print "Received status"
 			    	#print("[%s] %s\n" % (address, contents))
