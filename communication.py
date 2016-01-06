@@ -26,6 +26,8 @@ class Comm:
 
         self.matchConnect()
 
+        sleep(1)        
+
         self.monitor()
 
     def matchConnect(self):
@@ -55,5 +57,10 @@ class Comm:
             except zmq.ZMQError:
                 if(latestStatus):
                     self.policy(latestStatus, self)
+                    latestStatus = 0
+
+    def move(self, direction, distance):
+
+    def 
 
 
