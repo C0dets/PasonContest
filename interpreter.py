@@ -28,7 +28,7 @@ class Interpreter:
 
         ## Check that we are pointing at it
         angle = self.angleTo(tank1['position'], tank1['position'])
-        offset = math.asin(hitRad/projRange)
+        offset = math.asin(hitRad/distance)
         ## TODO consider offset negative problem
         if (tank1['turret'] > angle + offset or tank1['turret'] < angle - offset):
             return False
