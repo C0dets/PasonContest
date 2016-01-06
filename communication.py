@@ -25,7 +25,7 @@ class Comm:
 
         self.matchConnect()
 
-		self.monitor()
+        self.monitor()
 
     def matchConnect(self):
         print 'Connecting...'
