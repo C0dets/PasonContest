@@ -59,8 +59,8 @@ class Comm:
                     self.policy(latestStatus, self)
                     latestStatus = 0
 
-    def move(self, direction, distance):
+#    def move(self, direction, distance):
 
-    def 
+#    def 
 
 
