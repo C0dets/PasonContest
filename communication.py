@@ -24,9 +24,7 @@ class Comm:
         self.stateChannel.connect("tcp://%s:5556" % stateServer)
         self.stateChannel.setsockopt(zmq.SUBSCRIBE, self.matchToken)
 
-        self.matchConnect()
-
-        sleep(1)        
+        self.matchConnect()       
 
         self.monitor()
 
