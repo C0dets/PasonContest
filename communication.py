@@ -106,10 +106,10 @@ class Comm:
             }
         self.sendCommand(command)
 
-    def stop(self, tankId, command):
+    def stop(self, tankId, control):
         command = {
             "tank_id" : tankId,
             "comm_type" : "STOP",
-            "control" : command
+            "control" : control
             }
         self.sendCommand(command)
