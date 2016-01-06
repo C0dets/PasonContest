@@ -2,6 +2,7 @@ import zmq
 import time
 import sys
 import json
+import thread
 import credentials
 
 from  multiprocessing import Process
@@ -41,10 +42,13 @@ class Comm:
             print "Connection status: ", message["message"]
 
 	def monitor(self):
+		lastMessage = null
 		while True:
-			[address, contents] = self.stateChannel.recv_multipart()
-    	    #print("[%s] %s\n" % (address, contents))
-			status = json.loads(contents)
-			policy(status, self)
+			try:
+				[address, contents] = self.stateChannel.recv_multipart()
+				latestStatus = json.loads(contents)
+    	    	#print("[%s] %s\n" % (address, contents))
+			except zmq.ZMQError:
+				policy(latestStatus, self)
 
 
