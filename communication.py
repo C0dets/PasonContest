@@ -1,5 +1,6 @@
 import zmq
 import time
+import traceback
 import sys
 import json
 import thread
@@ -61,7 +62,7 @@ class Comm:
                         self.policy(latestStatus, self)
                         latestStatus = 0
                     except:
-                        print "Unexpected error:", sys.exc_info()[0]
+                        print "Unexpected error:", traceback.format_exc()
 
     def move(self, tankId, direction, distance):
         command = json.dumps({
