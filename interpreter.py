@@ -2,6 +2,7 @@ import math
 
 hitRad = 2
 colRad = 2
+projRange = 100
 
 class Interpreter:
     def __init__(self, status):
@@ -22,7 +23,14 @@ class Interpreter:
 
         ## Check if in range
         distance = self.distance(tank1['position'], tank1['position'])
-        if (distance > 100 + hitRad):
+        if (distance > projRange + hitRad):
+            return False
+
+        ## Check that we are pointing at it
+        angle = self.angleTo(tank1['position'], tank1['position'])
+        offset = math.asin(hitRad/projRange)
+        ## TODO consider offset negative problem
+        if (tank1['turret'] > angle + offset or tank1['turret'] < angle - offset):
             return False
 
         ## Check that were not firing at self
@@ -33,10 +41,31 @@ class Interpreter:
 
 
     def distance(self, point1, point2):
-        xDist = point1[0] - point2[0]
-        yDist = point1[1] - point2[1]
+        xDist = point2[0] - point1[0]
+        yDist = point2[1] - point1[1]
         return math.sqrt((xDist * xDist) + (yDist * yDist))
 
+    ## Point1 is the from point, point2 is the to point
+    ## returns 0 to 2pi
+    def angleTo(self, point1, point2):
+        xDist = point2[0] - point1[0]
+        yDist = point2[1] - point1[1]
+
+        if (xDist == 0):
+            if (yDist >= 0):
+                return math.pi/2
+            else:
+                return math.pi * 1.5
+
+        angle = math.atan(yDist/xDist)
+        ## Both left quads
+        if (xDist < 0):
+            return angle + math.pi
+        ## the bottom right quad
+        if (xDist > 0 and yDist < 0):
+            return angle + (2 * math.pi)
+        ## the top right quad
+        return angle
 
 
 
