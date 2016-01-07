@@ -39,14 +39,14 @@ class Interpreter:
         return True
 
 
-def distance(self, point1, point2):
+def distance(point1, point2):
     xDist = point2[0] - point1[0]
     yDist = point2[1] - point1[1]
     return math.sqrt((xDist * xDist) + (yDist * yDist))
 
 ## Point1 is the from point, point2 is the to point
 ## returns 0 to 2pi
-def angleTo(self, point1, point2):
+def angleTo(point1, point2):
     xDist = point2[0] - point1[0]
     yDist = point2[1] - point1[1]
 
