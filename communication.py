@@ -8,7 +8,6 @@ import credentials
 
 from  multiprocessing import Process
 
-context = zmq.Context()
 
 class Comm:
     def __init__(self, matchToken, commandServer, stateServer, policy):
@@ -29,6 +28,10 @@ class Comm:
 
         self.monitor()
 
+        self.stateChannel.close()
+        self.commandChannel.close()
+        context.term()
+
     def matchConnect(self):
         print 'Connecting...'
         command = json.dumps({
@@ -39,7 +42,7 @@ class Comm:
             })
         self.commandChannel.send(command)
         message = json.loads(self.commandChannel.recv())
-        if ("resp" in message and message["resp"] == "ok"):
+        if (message["comm_type"] == "MatchConnectResp" and message["resp"] == "ok"):
             print 'Conected to match!'
             self.clientToken = message["client_token"]
         else:
@@ -51,15 +54,19 @@ class Comm:
         while True:
             try:
                 [address, contents] = self.stateChannel.recv_multipart(zmq.NOBLOCK)
-                if (latestStatus):
-                    print "Discrading status"
-                latestStatus = json.loads(contents)
-                #print "Received status"
-                #print("[%s] %s\n" % (address, contents))
+                message = json.loads(contents)
+                if (message["comm_type"] == "GAME_END"):
+                    self.policy.gameRefresh()
+                elif (message["comm_type"] == "MATCH_END"):
+                    break
+                elif (message["comm_type"] == "GAMESTATE"):
+                    if (latestStatus):
+                        print "Discrading status"
+                    latestStatus = message
             except zmq.ZMQError:
                 if(latestStatus):
                     try:
-                        self.policy(latestStatus, self)
+                        self.policy.statusUpdate(latestStatus, self)
                         latestStatus = 0
                     except:
                         print "Unexpected error:", traceback.format_exc()
