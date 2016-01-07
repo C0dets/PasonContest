@@ -22,15 +22,14 @@ class Interpreter:
         tank2 = self.tanks[tank2Id]
 
         ## Check if in range
-        distance = self.distance(tank1['position'], tank2['position'])
+        distance = distance(tank1['position'], tank2['position'])
         if (distance > projRange + hitRad):
             return False
 
         ## Check that we are pointing at it
-        angle = self.angleTo(tank1['position'], tank2['position'])
+        angle = angleTo(tank1['position'], tank2['position'])
         offset = math.asin(hitRad/distance)
-        ## TODO consider offset negative problem
-        if (tank1['turret'] > angle + offset or tank1['turret'] < angle - offset):
+        if (not angleInRange(tank1['turret'], angle + offset, angle - offset)):
             return False
 
         ## Check that were not firing at self
@@ -40,32 +39,47 @@ class Interpreter:
         return True
 
 
-    def distance(self, point1, point2):
-        xDist = point2[0] - point1[0]
-        yDist = point2[1] - point1[1]
-        return math.sqrt((xDist * xDist) + (yDist * yDist))
+def distance(self, point1, point2):
+    xDist = point2[0] - point1[0]
+    yDist = point2[1] - point1[1]
+    return math.sqrt((xDist * xDist) + (yDist * yDist))
 
-    ## Point1 is the from point, point2 is the to point
-    ## returns 0 to 2pi
-    def angleTo(self, point1, point2):
-        xDist = point2[0] - point1[0]
-        yDist = point2[1] - point1[1]
+## Point1 is the from point, point2 is the to point
+## returns 0 to 2pi
+def angleTo(self, point1, point2):
+    xDist = point2[0] - point1[0]
+    yDist = point2[1] - point1[1]
 
-        if (xDist == 0):
-            if (yDist >= 0):
-                return math.pi/2
-            else:
-                return math.pi * 1.5
+    if (xDist == 0):
+        if (yDist >= 0):
+            return math.pi/2
+        else:
+            return math.pi * 1.5
 
-        angle = math.atan(yDist/xDist)
-        ## Both left quads
-        if (xDist < 0):
-            return angle + math.pi
-        ## the bottom right quad
-        if (xDist > 0 and yDist < 0):
-            return angle + (2 * math.pi)
-        ## the top right quad
-        return angle
+    angle = math.atan(yDist/xDist)
+    ## Both left quads
+    if (xDist < 0):
+        return angle + math.pi
+    ## the bottom right quad
+    if (xDist > 0 and yDist < 0):
+        return angle + (2 * math.pi)
+    ## the top right quad
+    return angle
+
+def angleInRange(act, upper, lower):
+    altUpper = 0
+    altLower = 1
+    if (upper > 2 * math.pi):
+        altUpper = upper - 2 * math.pi
+        altLower = lower - 2 * math.pi
+    elif (lower < 0):
+        altUpper = upper + 2 * math.pi
+        altLower = lower + 2 * math.pi
+
+    if ((act < upper and act > lower) or (act < altUpper and act > altLower)):
+        return True
+    return False
+
 
 
 
