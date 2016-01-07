@@ -6,7 +6,7 @@ class Policy:
     def __init__(self):
         self.intp = Interpreter()
 
-    def gameStart(self):
+    def refresh(self):
         return
 
     def statusUpdate(status, comm):
