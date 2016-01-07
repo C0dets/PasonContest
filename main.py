@@ -12,8 +12,6 @@ else:
 if len(sys.argv) == 4:
     stateServerAdd = sys.argv[3]
 
-policy = Policy()
-
-Comm(matchToken, commandServerAdd, stateServerAdd, policy.run)
+Comm(matchToken, commandServerAdd, stateServerAdd, Policy())
 
 
