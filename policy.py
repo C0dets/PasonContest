@@ -3,6 +3,14 @@ import credentials
 from interpreter import Interpreter
 
 def initial(status, comm):
+    if ("map" not in status):
+        print 'missing map'
+        print status
+        return
+    if ("players" not in status):
+        print 'missing players'
+        print status
+        return
     intp = Interpreter(status)
 
     myTanks = []
