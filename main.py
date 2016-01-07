@@ -1,6 +1,6 @@
 import sys
 from communication import Comm
-import policy
+from policy import Policy
 
 
 if len(sys.argv) < 3:
@@ -12,6 +12,8 @@ else:
 if len(sys.argv) == 4:
     stateServerAdd = sys.argv[3]
 
-Comm(matchToken, commandServerAdd, stateServerAdd, policy.initial)
+policy = Policy()
+
+Comm(matchToken, commandServerAdd, stateServerAdd, policy.run)
 
 

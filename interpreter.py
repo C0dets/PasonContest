@@ -6,7 +6,20 @@ colRad = 2
 projRange = 100
 
 class Interpreter:
-    def __init__(self, status):
+    def __init__(self):
+        self.period = 1
+        self.avgPeriod = 1
+        self.statusUpdates = 0
+        return
+
+    def periodCalculator(timeStamp):
+        return
+        if (self.statusUpdates < 10 and self.statusUpdates):
+            if (self.statusUpdates == 0):
+                self.avgPeriod
+
+    def statusUpdate(status):
+        self.periodCalculator(status["timestamp"])
         self.mapSize = status['map']['size']
         self.mapTerrain = status['map']['terrain']
         self.tanks = {}
