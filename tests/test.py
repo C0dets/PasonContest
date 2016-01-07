@@ -1,5 +1,5 @@
-import interpreterTest
+import mathHelperTest
 
 if __name__ == "__main__":
-    interpreterTest.test()
+    mathHelperTest.test()
     print 'All tests passed!!!!'
