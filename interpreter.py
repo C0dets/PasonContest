@@ -1,7 +1,7 @@
 import math
 import mathHelper
 
-projRange = 100
+PROJECTILE_RANGE = 100
 
 class Interpreter:
     def __init__(self):
@@ -15,13 +15,29 @@ class Interpreter:
     def refresh(self):
         return
 
+    '''
+    Checks if A is threatened by any enemyTanks
+    Returns an array of the threatening tanks, most threatening first
+    '''
+    def getThreatsToA(self, tankA, enemyTanks):
+        threats = []
+        for enTank in enemyTanks:
+            ## Check if in dangerous range
+            dangerousRange = PROJECTILE_RANGE + self.avgPeriod * enTank['speed'] * 1.1
+            distance = mathHelper.distanceBetween(tankA['position'], enTank['position'])
+            if (distance < dangerousRange):
+                ## Check if obstacles in the way
+                if not self.isSolidOnLine(tankA['position'], enTank['position']):
+                    threats.append({'tank': enTank, 'distance': distance})
+        return sorted(threats, key=lambda threat:threat['distance'])
+
     def canAshootB(self, tank1Id, tank2Id):
         tank1 = self.tanks[tank1Id]
         tank2 = self.tanks[tank2Id]
 
         ## Check if in range
         distance = mathHelper.distanceBetween(tank1['position'], tank2['position'])
-        if (distance > projRange + tank2['hitRadius']):
+        if (distance > PROJECTILE_RANGE + tank2['hitRadius']):
             return False
 
         ## Check that we are pointing at it
@@ -30,41 +46,57 @@ class Interpreter:
         if (not mathHelper.angleInRange(tank1['turret'], angle + offset, angle - offset)):
             return False
 
-        ## Check that no other tanks are in the way
-        for tank in self.tanks:
-            ## Don't consider the original 2 tanks
-            if (tank['id'] == tank1Id or tank['id'] == tank2Id):
-                continue
-            ## get the end point for tank1's range
-            endPoint = [
-                tank1['position'][0] + distance * math.sin(tank1['turret']),
-                tank1['position'][1] + distance * math.cos(tank1['turret'])
-            ]
-            if (mathHelper.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])):
-                return False
+        ## get the end point for tank1's range
+        endPoint = [
+            tank1['position'][0] + distance * math.sin(tank1['turret']),
+            tank1['position'][1] + distance * math.cos(tank1['turret'])
+        ]
 
-        ## Check for obstacles
+# Don't want to check if other tanks are blocking because they could move
+##        ## Check that no other tanks are in the way
+##        for tank in self.tanks:
+##            ## Don't consider the original 2 tanks
+##            if (tank['id'] == tank1Id or tank['id'] == tank2Id):
+##                continue
+##            if (mathHelper.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])):
+##                return False
+
+        ## Ensure path is clear of solids
+        if self.isSolidOnLine(tank1['position'], endPoint):
+            return False
 
         return True
 
     def whoWouldIShoot(self, tank1):
         targetId = False
-        targetDistance = projRange * 2 ##Just put it a ridiculous range to start
+        targetDistance = PROJECTILE_RANGE * 2 ## Just put it at a ridiculous range to start
+        ## get the end point for tank1's range
+        endPoint = [
+            tank1['position'][0] + PROJECTILE_RANGE * math.sin(tank1['turret']),
+            tank1['position'][1] + PROJECTILE_RANGE * math.cos(tank1['turret'])
+        ]
+
         for tankId in self.tanks:
             tank = self.tanks[tankId]
             ## Don't consider self
             if (tank['id'] == tank1['id']):
                 continue
-            ## get the end point for tank1's range
-            endPoint = [
-                tank1['position'][0] + projRange * math.sin(tank1['turret']),
-                tank1['position'][1] + projRange * math.cos(tank1['turret'])
-            ]
             distanceToIntersection = mathHelper.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])
             if (distanceToIntersection != False and distanceToIntersection < targetDistance):
                 targetDistance = distanceToIntersection
                 targetId = tank['id']
+
+        ## Ensure path is clear of solids
+        if self.isSolidOnLine(tank1['position'], endPoint):
+            return False
         return targetId
+
+    def isSolidOnLine(self, startPoint, endPoint):
+        for terrain in self.mapTerrain:
+            if terrain['type'] == 'SOLID':
+                if mathHelper.rectOnLine(terrain['boundingBox']['corner'], terrain['boundingBox']['size'], startPoint, endPoint):
+                    return True
+        return False
 
     def statusUpdate(self, status):
         self.periodCalculator(status["timestamp"])

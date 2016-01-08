@@ -19,8 +19,15 @@ class Policy:
     ##    Check if any tank is in danger, move away  (Do predictive calculations by observing past status and extrapolating?)
         self.evade()
 
-    ##    For each opponenet tank, find own tank that is closest, and assign opponent to own tank and move+rotate agressively
         self.offensivePositioning()
+
+        self.testStarted = False
+        print self.myTanks[0]['id'], self.myTanks[0]['tracks']
+        if not self.testStarted:
+            self.testStarted = True
+            self.comm.rotateTurret(self.myTanks[0]['id'], 300)
+            self.comm.rotateTank(self.myTanks[0]['id'], 300)
+
 
     def processStatus(self, status):
         if ("map" not in status):
@@ -56,8 +63,10 @@ class Policy:
             if (targetId and targetId not in self.myTankIds):
                 self.comm.fire(myTank['id'])
 
-    ## Makes neccessary evasion movements
-    ## if evading the "predictedLocation" for the next update is appended to the tank
+    '''
+    Makes neccessary evasion movements
+    if evading the "predictedLocation" for the next update is appended to the tank
+    '''
     def evade(self):
         threatGrid = np.zeros(7)
         
@@ -82,7 +91,12 @@ class Policy:
             ##    if rotationDirection > 0:
                     
 
+    '''
+    Should only move tanks not already moved
+    '''
     def offensivePositioning(self):
-        ## Should only move tanks not already moved
+        for myTank in self.myTanks:
+            myTank['threats'] = self.intp.getThreatsToA(myTank, self.enemyTanks)
+
         return
 

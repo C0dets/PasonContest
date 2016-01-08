@@ -13,13 +13,10 @@ class Comm:
     def __init__(self, matchToken, commandServer, stateServer):
         self.matchToken = matchToken
 
-        context = zmq.Context()
-
-        self.commandChannel = context.socket(zmq.REQ)
-        print "tcp://%s:5557" % commandServer
+        self.commandChannel = zmq.Context().socket(zmq.REQ)
         self.commandChannel.connect("tcp://%s:5557" % commandServer)
 
-        self.stateChannel = context.socket(zmq.SUB)
+        self.stateChannel = zmq.Context().socket(zmq.SUB)
         self.stateChannel.connect("tcp://%s:5556" % stateServer)
         self.stateChannel.setsockopt(zmq.SUBSCRIBE, self.matchToken)
 
@@ -73,8 +70,11 @@ class Comm:
 
     def sendCommand(self, command):
         command["client_token"] = self.clientToken
+##        print 'sending', command
         self.commandChannel.send(json.dumps(command))
+##        print 'sent'
         message = json.loads(self.commandChannel.recv())
+##        print 'recieved'
         if (message["comm_type"] == "ErrorResp"):
             print command
             print message
@@ -88,7 +88,12 @@ class Comm:
             }
         self.sendCommand(command)
 
-    def rotateTank(self, tankId, direction, rads):
+    def rotateTank(self, tankId, rads):
+        if rads > 0:
+            direction = 'CCW'
+        else:
+            direction = 'CW'
+            rads = rads * -1  #Make positive
         command = {
             "tank_id" : tankId,
             "comm_type" : "ROTATE",
@@ -97,7 +102,12 @@ class Comm:
             }
         self.sendCommand(command)
 
-    def rotateTurret(self, tankId, direction, rads):
+    def rotateTurret(self, tankId, rads):
+        if rads > 0:
+            direction = 'CCW'
+        else:
+            direction = 'CW'
+            rads = rads * -1  #Make positive
         command = {
             "tank_id" : tankId,
             "comm_type" : "ROTATE_TURRET",
