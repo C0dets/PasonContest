@@ -14,7 +14,6 @@ class Comm:
         self.matchToken = matchToken
 
         self.commandChannel = zmq.Context().socket(zmq.REQ)
-        print "tcp://%s:5557" % commandServer
         self.commandChannel.connect("tcp://%s:5557" % commandServer)
 
         self.stateChannel = zmq.Context().socket(zmq.SUB)

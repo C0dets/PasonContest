@@ -6,7 +6,8 @@ All Projectiles are:
 TANKS
 hit rad 2
 col rad 2
-turret rotation speed = 0.027932904 rads/s
+turret rotation speed = 1.5 rads/s
+tranks rotation speed = 1.5 rads/s
 
 
 SLOW

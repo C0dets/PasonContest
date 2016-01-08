@@ -126,7 +126,6 @@ class Interpreter:
 
         ## Move timestamp
         self.lastTimeStamp = timeStamp
-        print self.period
 
 
 
