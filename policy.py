@@ -65,11 +65,6 @@ class Policy:
     if evading the "predictedLocation" for the next update is appended to the tank
     '''
     def evade(self):
-        threats = []
-        for myTank in self.myTanks:
-            for enemyTank in self.enemyTanks:
-                if canAshootB(enemyTank, myTank):
-                    threats.append(enemyTank)
         return
 
     '''
