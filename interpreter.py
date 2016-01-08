@@ -40,7 +40,7 @@ class Interpreter:
                 tank1['position'][0] + distance * math.sin(tank1['turret']),
                 tank1['position'][1] + distance * math.cos(tank1['turret'])
             ]
-            if (mathHelp.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])):
+            if (mathHelper.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])):
                 return False
 
         ## Check for obstacles
@@ -60,7 +60,7 @@ class Interpreter:
                 tank1['position'][0] + projRange * math.sin(tank1['turret']),
                 tank1['position'][1] + projRange * math.cos(tank1['turret'])
             ]
-            distanceToIntersection = mathHelp.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])
+            distanceToIntersection = mathHelper.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])
             if (distanceToIntersection != False and distanceToIntersection < targetDistance):
                 targetDistance = distanceToIntersection
                 targetId = tank['id']
