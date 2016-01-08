@@ -94,7 +94,7 @@ class Interpreter:
     def isSolidOnLine(self, startPoint, endPoint):
         for terrain in self.mapTerrain:
             if terrain['type'] == 'SOLID':
-                if mathHelper.rectOnLine(terrain['boundingBox']['corner'], terrain['boundingBox']['size']):
+                if mathHelper.rectOnLine(terrain['boundingBox']['corner'], terrain['boundingBox']['size'], startPoint, endPoint):
                     return True
         return False
 
