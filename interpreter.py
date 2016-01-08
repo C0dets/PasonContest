@@ -127,6 +127,15 @@ class Interpreter:
         ## Move timestamp
         self.lastTimeStamp = timeStamp
 
+    def projectilesPaths(self):
+        threats = []
+        for projectile in self.projectiles:
+            A = projectile['position']
+            B = mathHelper.getLineEndpoint(A, projectile['range'], projectile['direction'])
+            threats.append([A,B])
+
+        return threats
+
 
 
 
