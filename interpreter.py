@@ -65,7 +65,7 @@ class Interpreter:
                 targetId = tank['id']
         return targetId
 
-    def statusUpdate(status):
+    def statusUpdate(self, status):
         self.periodCalculator(status["timestamp"])
         print self.period
         self.mapSize = status['map']['size']
@@ -79,7 +79,7 @@ class Interpreter:
                     self.tanks[tank['id']] = tank
 
 
-    def periodCalculator(timeStamp):
+    def periodCalculator(self, timeStamp):
         ## Up our status updates
         if (self.statusUpdates < 10):
             self.statusUpdates += 1
