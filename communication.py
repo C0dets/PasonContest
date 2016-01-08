@@ -66,7 +66,7 @@ class Comm:
             except zmq.ZMQError:
                 if(latestStatus):
                     try:
-                        self.policy.statusUpdate(latestStatus, self)
+                        self.policy.newStatus(latestStatus)
                         latestStatus = 0
                     except:
                         print "Unexpected error:", traceback.format_exc()
