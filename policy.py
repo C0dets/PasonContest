@@ -22,8 +22,8 @@ class Policy:
         testStarted = False
         print self.myTanks[0]['id'], self.myTanks[0]['turret']
         if not testStarted:
-            self.comm.rotateTurret(self.myTanks[0]['id'], 30)
-            self.comm.rotateTurret(self.myTanks[0]['id'], -30)
+            testStarted = True
+            self.comm.rotateTurret(self.myTanks[0]['id'], 300)
 
 
     def processStatus(self, status):
