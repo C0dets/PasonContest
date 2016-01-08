@@ -91,7 +91,12 @@ class Comm:
             }
         self.sendCommand(command)
 
-    def rotateTank(self, tankId, direction, rads):
+    def rotateTank(self, tankId, rads):
+        if rads > 0:
+            direction = 'CCW'
+        else:
+            direction = 'CW'
+            rads = rads * -1  #Make positive
         command = {
             "tank_id" : tankId,
             "comm_type" : "ROTATE",
