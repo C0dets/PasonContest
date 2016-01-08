@@ -49,7 +49,7 @@ def circleOnLine(lineStart, lineEnd, circleCentre, circleRadius):
     Cx = circleCentre[0]
     Cy = circleCentre[1]
 
-    distAB = distanceBetween(lineStart, lineEnd) 
+    distAB = distanceBetween(lineStart, lineEnd)
 
     ## find direction vector D from A to B
     Dx = (Bx-Ax)/distAB
@@ -57,14 +57,14 @@ def circleOnLine(lineStart, lineEnd, circleCentre, circleRadius):
 
     ## line equation is x = Dx*t + Ax, y = Dy*t + Ay with 0 <= t <= 1
     ## find t for closest point to circle centre
-    t = Dx*(Cx-Ax) + Dy*(Cy-Ay)    
+    t = Dx*(Cx-Ax) + Dy*(Cy-Ay)
 
     ## find point on line closes to circle
     Ex = t*Dx+Ax
     Ey = t*Dy+Ay
 
     distEC = distanceBetween([Cx,Cy], [Ex,Ey])
-    
+
     if (distEC <= circleRadius):
         dt = math.sqrt(circleRadius*circleRadius - distEC*distEC)
 
@@ -81,5 +81,6 @@ def circleOnLine(lineStart, lineEnd, circleCentre, circleRadius):
     else:
         return False
 
-
+def rectOnLine(lineStart, lineEnd, rectStartPoint, rectDimensions):
+    return False
 

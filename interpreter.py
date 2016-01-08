@@ -49,7 +49,7 @@ class Interpreter:
 
     def whoWouldIShoot(self, tank1):
         targetId = False
-        targetDistance = projRange * 2 ##Just put it a ridiculous range to start
+        targetDistance = projRange * 2 ## Just put it at a ridiculous range to start
         for tankId in self.tanks:
             tank = self.tanks[tankId]
             ## Don't consider self
@@ -64,7 +64,17 @@ class Interpreter:
             if (distanceToIntersection != False and distanceToIntersection < targetDistance):
                 targetDistance = distanceToIntersection
                 targetId = tank['id']
+
+        ## Ensure path is clear of solids
+        for
         return targetId
+
+    def isSolidOnLine(self, startPoint, endPoint):
+        for terrain in self.mapTerrain:
+            if (terrain['type'] == 'SOLID'):
+                if (mathHelper.rectOnLine(terrain['boundingBox']['corner'], terrain['boundingBox']['size']))
+                    return True
+        return False
 
     def statusUpdate(self, status):
         self.periodCalculator(status["timestamp"])
