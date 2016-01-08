@@ -6,8 +6,8 @@ projRange = 100
 class Interpreter:
     def __init__(self):
         self.lastTimeStamp = False
-        self.period = 1
-        self.avgPeriod = 1
+        self.period = 0.10002
+        self.avgPeriod = 0.10002
         self.statusUpdates = 0
         return
 
@@ -68,7 +68,6 @@ class Interpreter:
 
     def statusUpdate(self, status):
         self.periodCalculator(status["timestamp"])
-        print self.period
         self.mapSize = status['map']['size']
         self.mapTerrain = status['map']['terrain']
         self.tanks = {}
