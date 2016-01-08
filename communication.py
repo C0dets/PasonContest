@@ -73,11 +73,11 @@ class Comm:
 
     def sendCommand(self, command):
         command["client_token"] = self.clientToken
-        print 'sending', command
+##        print 'sending', command
         self.commandChannel.send(json.dumps(command))
-        print 'sent'
+##        print 'sent'
         message = json.loads(self.commandChannel.recv())
-        print 'recieved'
+##        print 'recieved'
         if (message["comm_type"] == "ErrorResp"):
             print command
             print message
