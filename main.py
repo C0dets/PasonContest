@@ -12,6 +12,11 @@ else:
 if len(sys.argv) == 4:
     stateServerAdd = sys.argv[3]
 
-Comm(matchToken, commandServerAdd, stateServerAdd, Policy())
+## creaate com and policy
+comm = Comm(matchToken, commandServerAdd, stateServerAdd)
+policy = Policy(comm)
+
+## Start the match
+comm.start(policy)
 
 

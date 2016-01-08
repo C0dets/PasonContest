@@ -11,8 +11,7 @@ from  multiprocessing import Process
 context = zmq.Context()
 
 class Comm:
-    def __init__(self, matchToken, commandServer, stateServer, policy):
-        self.policy = policy
+    def __init__(self, matchToken, commandServer, stateServer):
         self.matchToken = matchToken
 
         context = zmq.Context()
@@ -25,8 +24,9 @@ class Comm:
         self.stateChannel.connect("tcp://%s:5556" % stateServer)
         self.stateChannel.setsockopt(zmq.SUBSCRIBE, self.matchToken)
 
-        self.matchConnect()       
-
+    def start(policy):
+        self.policy = policy
+        self.matchConnect()
         self.monitor()
 
     def matchConnect(self):

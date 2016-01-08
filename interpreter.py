@@ -1,8 +1,6 @@
 import math
 import mathHelper
 
-hitRad = 2
-colRad = 2
 projRange = 100
 
 class Interpreter:
@@ -13,8 +11,63 @@ class Interpreter:
         self.statusUpdates = 0
         return
 
+    ## Should wipe memory of previous game
+    def refresh(self):
+        return
+
+    def canAshootB(self, tank1Id, tank2Id):
+        tank1 = self.tanks[tank1Id]
+        tank2 = self.tanks[tank2Id]
+
+        ## Check if in range
+        distance = mathHelper.distanceBetween(tank1['position'], tank2['position'])
+        if (distance > projRange + tank2['hitRadius']):
+            return False
+
+        ## Check that we are pointing at it
+        angle = mathHelper.angleFromAToB(tank1['position'], tank2['position'])
+        offset = math.asin(tank2['hitRadius']/distance)
+        if (not mathHelper.angleInRange(tank1['turret'], angle + offset, angle - offset)):
+            return False
+
+        ## Check that no other tanks are in the way
+        for tank in self.tanks:
+            ## Don't consider the original 2 tanks
+            if (tank['id'] == tank1Id or tank['id'] == tank2Id):
+                continue
+            ## get the end point for tank1's range
+            endPoint = [
+                tank1['position'][0] + distance * math.sin(tank1['turret']),
+                tank1['position'][1] + distance * math.cos(tank1['turret'])
+            ]
+            if (mathHelp.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])):
+                return False
+
+        ## Check for obstacles
+
+        return True
+
+    def whoWouldIShoot(self, tank1):
+        targetId = False
+        targetDistance = projRange * 2 ##Just put it a ridiculous range to start
+        for tank in self.tanks:
+            ## Don't consider self
+            if (tank['id'] == tank1['id']):
+                continue
+            ## get the end point for tank1's range
+            endPoint = [
+                tank1['position'][0] + projRange * math.sin(tank1['turret']),
+                tank1['position'][1] + projRange * math.cos(tank1['turret'])
+            ]
+            distanceToIntersection = mathHelp.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])
+            if (distanceToIntersection != False and distanceToIntersection < targetDistance):
+                targetDistance = distanceToIntersection
+                targetId = tank['id']
+        return targetId
+
     def statusUpdate(status):
         self.periodCalculator(status["timestamp"])
+        print self.period
         self.mapSize = status['map']['size']
         self.mapTerrain = status['map']['terrain']
         self.tanks = {}
@@ -25,31 +78,6 @@ class Interpreter:
                 for projectile in tank['projectiles']:
                     self.tanks[tank['id']] = tank
 
-
-    def inRange(self, tank1Id, tank2Id):
-        tank1 = self.tanks[tank1Id]
-        tank2 = self.tanks[tank2Id]
-
-        ## Check if in range
-        distance = mathHelper.distanceBetween(tank1['position'], tank2['position'])
-        if (distance > projRange + hitRad):
-            return False
-
-        ## Check that we are pointing at it
-        angle = mathHelper.angleFromAToB(tank1['position'], tank2['position'])
-        offset = math.asin(hitRad/distance)
-        if (not mathHelper.angleInRange(tank1['turret'], angle + offset, angle - offset)):
-            return False
-
-        ## Check that no other tanks are in the way
-##        for tank in self.tanks:
-##            if (self.inPath(angle, distance, tank['position'], )):
-##                return False
-
-
-        ## Check for obstacles
-
-        return True
 
     def periodCalculator(timeStamp):
         ## Up our status updates
