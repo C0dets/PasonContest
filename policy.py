@@ -1,4 +1,6 @@
 import credentials
+import mathHelper
+import numpy as np
 
 from interpreter import Interpreter
 
@@ -57,12 +59,28 @@ class Policy:
     ## Makes neccessary evasion movements
     ## if evading the "predictedLocation" for the next update is appended to the tank
     def evade(self):
-        threats = []
+        threatGrid = np.zeros(7)
+        
         for myTank in self.myTanks:
-            for enemyTank in self.enemyTanks:
-                if canAshootB(enemyTank, myTank):
-                    threats.append(enemyTank)
-        return
+            for i in range(7):
+                for projectile in self.intp.projectiles:
+                    angle = 2*np.pi/i
+                    if i == 0:
+                        newPosition = myTank['position']
+                    else:
+                        newPosition = getLineEndpoint(myTank['position'], hitRadius, angle)
+                    A = projectile['position']
+                    B = mathHelper.getLineEndpoint(A, projectile['range'], projectile['direction'])
+                    if mathHelper.circleOnLine(A, B, newPosition, myTank['hitRadius'])
+                        threatGrid[i] = max(1/projectile['range'], threatGrid[i])
+            
+            i = np.min(threatGrid)
+        
+            ##if i != 0:
+            ##    angle = 2*np.pi/i
+            ##    rotationDirection = myTank['tracks']-angle
+            ##    if rotationDirection > 0:
+                    
 
     def offensivePositioning(self):
         ## Should only move tanks not already moved

@@ -81,5 +81,12 @@ def circleOnLine(lineStart, lineEnd, circleCentre, circleRadius):
     else:
         return False
 
+def getLineEndpoint(lineStart, lineLength, lineAngle):
+        x = lineLength * math.cos(lineAngle)
+        y = lineLength * math.sin(lineAngle)
+        
+        return [lineStart[0]+x,lineStart[1]+y]
+        
+
 
 
