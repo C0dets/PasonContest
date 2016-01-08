@@ -50,7 +50,8 @@ class Interpreter:
     def whoWouldIShoot(self, tank1):
         targetId = False
         targetDistance = projRange * 2 ##Just put it a ridiculous range to start
-        for tank in self.tanks:
+        for tankId in self.tanks:
+            tank = self.tanks[tankId]
             ## Don't consider self
             if (tank['id'] == tank1['id']):
                 continue
