@@ -44,7 +44,7 @@ class Policy:
 
         return True
 
-    def refresh(self):
+    def gameRefresh(self):
         self.intp.refresh()
 
     def doAttacks(self):
