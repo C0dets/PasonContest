@@ -41,6 +41,45 @@ def angleInRange(act, upper, lower):
         return True
     return False
 
+def circleOnLine(lineStart, lineEnd, circleCentre, circleRadius):
+    Ax = lineStart[0]
+    Ay = lineStart[1]
+    Bx = lineEnd[0]
+    By = lineEnd[1]
+    Cx = circleCentre[0]
+    Cy = circleCentre[1]
+
+    distAB = distanceBetween(lineStart, lineEnd) 
+
+    ## find direction vector D from A to B
+    Dx = (Bx-Ax)/distAB
+    Dy = (By-Ay)/distAB
+
+    ## line equation is x = Dx*t + Ax, y = Dy*t + Ay with 0 <= t <= 1
+    ## find t for closest point to circle centre
+    t = Dx*(Cx-Ax) + Dy*(Cy-Ay)    
+
+    ## find point on line closes to circle
+    Ex = t*Dx+Ax
+    Ey = t*Dy+Ay
+
+    distEC = distanceBetween([Cx,Cy], [Ex,Ey])
+    
+    if (distEC <= circleRadius):
+        dt = math.sqrt(circleRadius*circleRadius - distEC*distEC)
+
+        # find first intersection point
+        Fx = (t-dt)*Dx + Ax
+        Fy = (t-dt)*Dy + Ay
+
+        # find first intersection point
+        Gx = (t+dt)*Dx + Ax
+        Gy = (t+dt)*Dy + Ay
+
+        return  min(distanceBetween(lineStart, [Fx,Fy]), distanceBetween(lineStart, [Gx,Gy]))
+
+    else:
+        return False
 
 
 
