@@ -19,13 +19,6 @@ class Policy:
 
         self.offensivePositioning()
 
-        self.testStarted = False
-        print self.myTanks[0]['id'], self.myTanks[0]['tracks']
-        if not self.testStarted:
-            self.testStarted = True
-            self.comm.rotateTurret(self.myTanks[0]['id'], 300)
-            self.comm.rotateTank(self.myTanks[0]['id'], 300)
-
 
     def processStatus(self, status):
         if ("map" not in status):
