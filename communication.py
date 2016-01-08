@@ -13,13 +13,11 @@ class Comm:
     def __init__(self, matchToken, commandServer, stateServer):
         self.matchToken = matchToken
 
-        context = zmq.Context()
-
-        self.commandChannel = context.socket(zmq.REQ)
+        self.commandChannel = zmq.Context().socket(zmq.REQ)
         print "tcp://%s:5557" % commandServer
         self.commandChannel.connect("tcp://%s:5557" % commandServer)
 
-        self.stateChannel = context.socket(zmq.SUB)
+        self.stateChannel = zmq.Context().socket(zmq.SUB)
         self.stateChannel.connect("tcp://%s:5556" % stateServer)
         self.stateChannel.setsockopt(zmq.SUBSCRIBE, self.matchToken)
 
