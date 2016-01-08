@@ -15,8 +15,10 @@ class Interpreter:
     def refresh(self):
         return
 
-    ## Checks if A is threatened by any enemyTanks
-    ## Returns an array of the threatening tanks, most threatening first
+    '''
+    Checks if A is threatened by any enemyTanks
+    Returns an array of the threatening tanks, most threatening first
+    '''
     def getThreatsToA(self, tankA, enemyTanks):
         threats = []
         for enTank in enemyTanks:
@@ -124,6 +126,7 @@ class Interpreter:
 
         ## Move timestamp
         self.lastTimeStamp = timeStamp
+        print self.period
 
 
 
