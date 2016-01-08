@@ -71,12 +71,12 @@ class Interpreter:
         self.mapSize = status['map']['size']
         self.mapTerrain = status['map']['terrain']
         self.tanks = {}
-        self.projectiles = {}
+        self.projectiles = []
         for player in status['players']:
             for tank in player['tanks']:
                 self.tanks[tank['id']] = tank
                 for projectile in tank['projectiles']:
-                    self.tanks[tank['id']] = tank
+                    self.projectiles.append(projectile)
 
 
     def periodCalculator(self, timeStamp):
