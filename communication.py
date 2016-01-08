@@ -23,7 +23,7 @@ class Comm:
         self.stateChannel.connect("tcp://%s:5556" % stateServer)
         self.stateChannel.setsockopt(zmq.SUBSCRIBE, self.matchToken)
 
-    def start(policy):
+    def start(self, policy):
         self.policy = policy
         self.matchConnect()
         self.monitor()
