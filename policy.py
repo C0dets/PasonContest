@@ -7,8 +7,8 @@ class Policy:
         self.comm = comm
         self.intp = Interpreter()
 
-    def newStatus(status, comm):
-        if (not self.processStatus):
+    def newStatus(status):
+        if (not self.processStatus(status)):
             return
         self.intp.statusUpdate(status)
 
@@ -20,7 +20,7 @@ class Policy:
     ##    For each opponenet tank, find own tank that is closest, and assign opponent to own tank and move+rotate agressively
         self.offensivePositioning()
 
-    def processStatus(status):
+    def processStatus(self, status):
         if ("map" not in status):
             print 'missing map'
             print status
@@ -59,7 +59,7 @@ class Policy:
     def evade(self):
         return
 
-    def offensivePositioning():
+    def offensivePositioning(self):
         ## Should only move tanks not already moved
         return
 
