@@ -58,7 +58,7 @@ class Policy:
     def doAttacks(self):
         ## Check if any tank should attack
         for myTank in self.myTanks:
-            targetId = self.intp.whoWouldIShoot(myTank)
+            target = self.intp.whoWouldIShoot(myTank)
             # Check that we would be firing at enemy
             if (target['id'] and target['id'] not in self.myTankIds):
                 # Check that no walls are in the way
