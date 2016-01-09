@@ -100,7 +100,7 @@ class Interpreter:
                 targetDistance = distanceToIntersection
                 target = tank
 
-        if taget == False:
+        if target == False:
             return False
 
         # Ensure path is clear of solids
