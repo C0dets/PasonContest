@@ -95,7 +95,7 @@ class Policy:
                 diff = myAngle-reqAngle
                 rotationReq = np.arctan(np.sin(diff)/ np.cos(diff))
 
-                #self.comm.rotateTank(myTank['id'], rotationReq)
+                self.comm.rotateTank(myTank['id'], rotationReq)
 
                 myNewAngle = myAngle+rotationReq
 
