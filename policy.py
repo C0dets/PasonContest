@@ -162,8 +162,14 @@ class Policy:
                             enemyAttacked[entry['tankB']['id']] = 0
 
         # assign any remaining attackers to enemies
-##        for attacker in remainingAttackers:
-            # Find closest enemy via path finding and assign that
+        for attacker in remainingAttackers:
+            # Find closest enemy via path finding and assign that enemy
+            myCorrelations = [cor for cor in correlationArr if cor['tankA'] == attacker]
+            myCorrelations = sorted(myCorrelations, key=lambda entry:entry['distance'])
+            for cor in myCorrelations:
+                remainingAttackers.remove(attacker)
+                cor['targetId'] = cor['tankB']['id']
+                usedAttackers[attacker] = entry
 
         # Rotate turret appropriately
         for attacker in usedAttackers:
