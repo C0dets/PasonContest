@@ -66,7 +66,7 @@ class Interpreter:
 ##                return False
 
         ## Ensure path is clear of solids
-        if self.isSolidOnLine(tank1['position'], endPoint):
+        if self.isShotClear(tank1['position'], endPoint):
             return False
 
         return True
@@ -88,14 +88,14 @@ class Interpreter:
             distanceToIntersection = mathHelper.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])
             if (distanceToIntersection != False and distanceToIntersection < targetDistance):
                 targetDistance = distanceToIntersection
-                targetId = tank['id']
+                target = tank
 
         ## Ensure path is clear of solids
-        if self.isSolidOnLine(tank1['position'], endPoint):
+        if self.isShotClear(tank1['position'], endPoint):
             return False
-        return targetId
+        return target
 
-    def isSolidOnLine(self, startPoint, endPoint):
+    def isShotClear(self, startPoint, endPoint):
         for terrain in self.mapTerrain:
             if terrain['type'] == 'SOLID':
                 if mathHelper.rectOnLine(terrain['boundingBox']['corner'], terrain['boundingBox']['size'], startPoint, endPoint):

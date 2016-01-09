@@ -59,8 +59,11 @@ class Policy:
         ## Check if any tank should attack
         for myTank in self.myTanks:
             targetId = self.intp.whoWouldIShoot(myTank)
-            if (targetId and targetId not in self.myTankIds):
-                self.comm.fire(myTank['id'])
+            # Check that we would be firing at enemy
+            if (target['id'] and target['id'] not in self.myTankIds):
+                # Check that no walls are in the way
+                if self.intp.isShotClear(myTank['position'], target['position']):
+                    self.comm.fire(myTank['id'])
 
     '''
     Makes neccessary evasion movements
