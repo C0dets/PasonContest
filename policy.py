@@ -16,7 +16,7 @@ class Policy:
         self.comm = comm
         self.intp = Interpreter()
         self.lasti = 0
-        self.lastDirection = "FWD"
+        self.lastDirection = 0
         self.lastThreat = 0
 
     def newStatus(self, status):
@@ -83,6 +83,7 @@ class Policy:
                 else:
                     angle = 2*np.pi*i/6
                     newPosition = mathHelper.getLineEndpoint(myTank['position'], 2*myTank['hitRadius'], angle)
+                # TODO: Dodge enemy turrets
                 for projectile in self.intp.projectiles:
                     A = projectile['position']
                     B = mathHelper.getLineEndpoint(A, projectile['range'], projectile['direction'])
@@ -130,6 +131,9 @@ class Policy:
                 predictedDist = self.intp.avgPeriod * myTank['speed']
 
                 myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
+
+            else:
+                direction = 0
 
             self.lastDirection = direction
             self.lasti = i
