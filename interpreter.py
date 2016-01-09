@@ -67,10 +67,7 @@ class Interpreter:
             return False
 
         ## get the end point for tank1's range
-        endPoint = [
-            tank1['position'][0] + distance * math.sin(tank1['turret']),
-            tank1['position'][1] + distance * math.cos(tank1['turret'])
-        ]
+        endPoint = mathHelper.getLineEndpoint(tank1['position'], distance, tank1['turret'])
 
 # Don't want to check if other tanks are blocking because they could move
 ##        ## Check that no other tanks are in the way
@@ -83,18 +80,15 @@ class Interpreter:
 
         ## Ensure path is clear of solids
         if self.isShotClear(tank1['position'], endPoint):
-            return False
+            return True
 
-        return True
+        return False
 
     def whoWouldIShoot(self, tank1):
         target = False
         targetDistance = PROJECTILE_RANGE * 2 ## Just put it at a ridiculous range to start
         ## get the end point for tank1's range
-        endPoint = [
-            tank1['position'][0] + PROJECTILE_RANGE * math.sin(tank1['turret']),
-            tank1['position'][1] + PROJECTILE_RANGE * math.cos(tank1['turret'])
-        ]
+        endPoint = mathHelper.getLineEndpoint(tank1['position'], PROJECTILE_RANGE, tank1['turret'])
 
         for tankId in self.tanks:
             tank = self.tanks[tankId]
@@ -108,15 +102,16 @@ class Interpreter:
 
         ## Ensure path is clear of solids
         if self.isShotClear(tank1['position'], endPoint):
+            return target
+        else:
             return False
-        return target
 
     def isShotClear(self, startPoint, endPoint):
         for terrain in self.mapTerrain:
             if terrain['type'] == 'SOLID':
                 if mathHelper.rectOnLine(terrain['boundingBox']['corner'], terrain['boundingBox']['size'], startPoint, endPoint):
-                    return True
-        return False
+                    return False
+        return True
 
     def statusUpdate(self, status):
         self.periodCalculator(status["timestamp"])
