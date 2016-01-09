@@ -33,7 +33,7 @@ class Interpreter:
         result['distance'] = mathHelper.distanceBetween(tankA['position'], tankB['position'])
         result['angle'] = mathHelper.angleFromAToB(tankA['position'], tankB['position'])
 
-        return sorted(threats, key=lambda threat:threat['distance'])
+        return result
 
     def canAshootB(self, tank1Id, tank2Id):
         tank1 = self.tanks[tank1Id]
