@@ -102,42 +102,45 @@ class Policy:
             direction = 0
             myNewAngle = 0
 
-            if i == self.lasti and i!= 0:
-                direction = self.lastDirection
-                self.comm.move(myTank['id'], direction, 2*myTank['hitRadius'])
+            self.comm.rotateTank(myTank['id'], rotationReq)
 
-                predictedDist = self.intp.avgPeriod * myTank['speed']
+            while(False):
+                if i == self.lasti and i!= 0:
+                    direction = self.lastDirection
+                    self.comm.move(myTank['id'], direction, 2*myTank['hitRadius'])
 
-                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, self.lastAngle)
+                    predictedDist = self.intp.avgPeriod * myTank['speed']
 
-            elif i != 0:
-                reqAngle = 2*np.pi*i/6
-                myAngle = myTank['tracks']
-                diff = mathHelper.smallestAngleBetween(myAngle, reqAngle)
-                rotationReq = np.arctan(np.sin(diff)/ np.cos(diff))
+                    myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, self.lastAngle)
 
-                self.comm.rotateTank(myTank['id'], rotationReq)
+                elif i != 0:
+                    reqAngle = 2*np.pi*i/6
+                    myAngle = myTank['tracks']
+                    diff = mathHelper.smallestAngleBetween(myAngle, reqAngle)
+                    rotationReq = np.arctan(np.sin(diff)/ np.cos(diff))
 
-                myNewAngle = myAngle+rotationReq
+                    self.comm.rotateTank(myTank['id'], rotationReq)
 
-                if myNewAngle < 0:
-                    myNewAngle += 2*np.pi
-                if myNewAngle > 2*np.pi:
-                    myNewAngle -= 2*np.pi
+                    myNewAngle = myAngle+rotationReq
 
-                if myNewAngle != reqAngle:
-                    direction = "REV"
+                    if myNewAngle < 0:
+                        myNewAngle += 2*np.pi
+                    if myNewAngle > 2*np.pi:
+                        myNewAngle -= 2*np.pi
+
+                    if myNewAngle != reqAngle:
+                        direction = "REV"
+                    else:
+                        direction = "FWD"
+
+                    self.comm.move(myTank['id'], direction, 2*myTank['hitRadius'])
+
+                    predictedDist = self.intp.avgPeriod * myTank['speed']
+
+                    myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
+
                 else:
-                    direction = "FWD"
-
-                self.comm.move(myTank['id'], direction, 2*myTank['hitRadius'])
-
-                predictedDist = self.intp.avgPeriod * myTank['speed']
-
-                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
-
-            else:
-                myTank['predictedPosition'] = myTank['position']
+                    myTank['predictedPosition'] = myTank['position']
 
             self.lastDirection = direction
             self.lasti = i
