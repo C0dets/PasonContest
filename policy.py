@@ -109,7 +109,7 @@ class Policy:
                 else:
                     direction = "REV"
 
-                self.comm.move(myTank['id'], direction, 10)
+                self.comm.move(myTank['id'], direction, 2*myTank['hitRadius'])
 
                 predictedDist = self.intp.avgPeriod * myTank['speed']
 
