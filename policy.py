@@ -87,7 +87,7 @@ class Policy:
                 if self.intp.obstacleInWay(newPosition, myTank['collisionRadius']):
                     threatGrid[i] = max(10, threatGrid[i])
 
-            i = np.min(threatGrid)
+            i = np.argmin(threatGrid)
 
             if i != 0:
                 reqAngle = 2*np.pi/i
@@ -95,7 +95,7 @@ class Policy:
                 diff = myAngle-reqAngle
                 rotationReq = np.arctan(np.sin(diff)/ np.cos(diff))
 
-                self.comm.rotateTank(myTank['id'], rotationReq)
+                #self.comm.rotateTank(myTank['id'], rotationReq)
 
                 myNewAngle = myAngle+rotationReq
 
