@@ -81,7 +81,7 @@ class Policy:
                     A = projectile['position']
                     B = mathHelper.getLineEndpoint(A, projectile['range'], projectile['direction'])
                     strikeDist = mathHelper.circleOnLine(A, B, newPosition, myTank['hitRadius'])
-                    if strikeDistance != False:
+                    if strikeDist != False:
                         threatGrid[i] = max(1/strikeDist, threatGrid[i])
                 if self.intp.obstacleInWay(newPosition, myTank['collisionRadius']):
                     threatGrid[i] = max(10, threatGrid[i])
