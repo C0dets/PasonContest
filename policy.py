@@ -87,7 +87,7 @@ class Policy:
                 # TODO: Dodge enemy turrets
                 enemyThreats = self.intp.getThreatsToA(myTank, self.enemyTanks)
                 for enemyTank in enemyThreats:
-                    if self.intp.canAshootB(enemyTank, myTank):
+                    if self.intp.canAshootB(enemyTank['id'], myTank['id']):
                         strikeDist = mathHelper.distanceBetween(myTank['position']+myTank['hitRadius'], enemyTank['position'])
                         threatGrid[i] = max(1/strikeDist, threatGrid[i])
                 for projectile in self.intp.projectiles:
