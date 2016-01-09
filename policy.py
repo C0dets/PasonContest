@@ -176,7 +176,6 @@ class Policy:
             myCorrelations = [cor for cor in correlationArr if cor['tankA']['id'] == attacker]
             myCorrelations = sorted(myCorrelations, key=lambda entry:entry['distance'])
             for cor in myCorrelations:
-                remainingAttackers.remove(attacker)
                 cor['targetId'] = cor['tankB']['id']
                 usedAttackers[attacker] = entry
 
