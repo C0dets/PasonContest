@@ -138,10 +138,10 @@ class Interpreter:
 
         ## Calc current period
         if (self.lastTimeStamp != False):
-            self.period = timeStamp - self.lastTimeStamp
+            self.period = (timeStamp - self.lastTimeStamp) / 1000
 
         ## Calc avg period
-        if (self.statusUpdates > 1):
+        if (self.statusUpdates >= 1):
             self.avgPeriod = (self.avgPeriod * (self.statusUpdates - 1) + self.period) / self.statusUpdates
 
         ## Move timestamp
