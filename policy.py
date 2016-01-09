@@ -71,23 +71,43 @@ class Policy:
 
         for myTank in self.myTanks:
             for i in range(7):
+                angle = 2*np.pi/i
+                if i == 0:
+                    newPosition = myTank['position']
+                else:
+                    newPosition = getLineEndpoint(myTank['position'], myTank['hitRadius'], angle)
                 for projectile in self.intp.projectiles:
-                    angle = 2*np.pi/i
-                    if i == 0:
-                        newPosition = myTank['position']
-                    else:
-                        newPosition = getLineEndpoint(myTank['position'], hitRadius, angle)
                     A = projectile['position']
                     B = mathHelper.getLineEndpoint(A, projectile['range'], projectile['direction'])
                     if mathHelper.circleOnLine(A, B, newPosition, myTank['hitRadius']):
                         threatGrid[i] = max(1/projectile['range'], threatGrid[i])
+            
+                if self.intp.wallInWay(newPosition, myTank['collisionRadius']):
+                    threatGrid[i] = max(10, threatGrid[i])
 
             i = np.min(threatGrid)
+        
+            if i != 0:
+                reqAngle = 2*np.pi/i
+                myAngle = myTank['tracks']
+                diff = myAngle-reqAngle
+                rotationReq = np.arctan(np.sin(diff)/ np.cos(diff))
 
-            ##if i != 0:
-            ##    angle = 2*np.pi/i
-            ##    rotationDirection = myTank['tracks']-angle
-            ##    if rotationDirection > 0:
+                self.comm.rotateTank(myTank['id'], rotationReq)
+
+                myNewAngle = myAngle+rotationReq            
+
+                if myNewAngle < 0:
+                    myNewAngle += 2*np.pi
+                if myNewAngle > 2*np.pi:
+                    myNewAngle -= 2*np.pi
+
+                if myNewAngle != reqAngle:
+                    direction = "FWD"
+                else:
+                    direction = "REV"
+
+                self.comm.move(myTank['id'], direction, myTank['hitRadius'])
 
 
     '''
