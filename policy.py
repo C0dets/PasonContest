@@ -61,8 +61,11 @@ class Policy:
         for myTank in self.myTanks:
             target = self.intp.whoWouldIShoot(myTank)
             # Check that we would be firing at enemy
-            if (target and target['id'] not in self.myTankIds):
-                self.comm.fire(myTank['id'])
+            if target:
+                if target['id'] not in self.myTankIds:
+                    self.comm.fire(myTank['id'])
+                else:
+                    self.comm.stop(myTank['id'], 'FIRE')
 
     '''
     Makes neccessary evasion movements
