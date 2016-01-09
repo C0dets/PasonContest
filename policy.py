@@ -60,7 +60,7 @@ class Policy:
         for myTank in self.myTanks:
             target = self.intp.whoWouldIShoot(myTank)
             # Check that we would be firing at enemy
-            if (target['id'] and target['id'] not in self.myTankIds):
+            if (target and target['id'] not in self.myTankIds):
                 # Check that no walls are in the way
                 if self.intp.isShotClear(myTank['position'], target['position']):
                     self.comm.fire(myTank['id'])
