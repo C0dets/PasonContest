@@ -179,11 +179,13 @@ class Policy:
                 cor['targetId'] = cor['tankB']['id']
                 usedAttackers[attacker] = entry
 
+            # find closest shootable friend and move somewhat close to them  (like 30 away?)
+
         # Rotate turret appropriately
         for attacker in usedAttackers:
             # add predicitve factor to rotation
             angleToRotate = usedAttackers[attacker]['turretChange'] * 1.1
             self.comm.rotateTurret(attacker, angleToRotate)
 
-        return
 
+        return
