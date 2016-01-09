@@ -107,19 +107,19 @@ class Policy:
 
             i = np.argmin(threatGrid)
 
-            if self.tankPlans[myTank['id']].lastThreat <= threatGrid[i]:
-                i = self.tankPlans[myTank['id']].lasti
+            if self.tankPlans[myTank['id']]['lastThreat'] <= threatGrid[i]:
+                i = self.tankPlans[myTank['id']]['lasti']
 
             direction = 0
             myNewAngle = 0
 
-            if i == self.tankPlans[myTank['id']].lasti and i!= 0:
-                direction = self.tankPlans[myTank['id']].lastDirection
+            if i == self.tankPlans[myTank['id']]['lasti'] and i!= 0:
+                direction = self.tankPlans[myTank['id']]['lastDirection']
                 self.comm.move(myTank['id'], direction, 2*myTank['hitRadius'])
 
                 predictedDist = self.intp.avgPeriod * myTank['speed']
 
-                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, self.tankPlans[myTank['id']].lastAngle)
+                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, self.tankPlans[myTank['id']]['lastAngle'])
 
             elif i != 0:
                 reqAngle = 2*np.pi*i/6
@@ -150,10 +150,10 @@ class Policy:
             else:
                 myTank['predictedPosition'] = myTank['position']
 
-            self.tankPlans[myTank['id']].lastDirection = direction
-            self.tankPlans[myTank['id']].lasti = i
-            self.tankPlans[myTank['id']].lastAngle = myNewAngle
-            self.tankPlans[myTank['id']].lastThreat = threatGrid[i]
+            self.tankPlans[myTank['id']]['lastDirection'] = direction
+            self.tankPlans[myTank['id']]['lasti'] = i
+            self.tankPlans[myTank['id']]['lastAngle'] = myNewAngle
+            self.tankPlans[myTank['id']]['lastThreat'] = threatGrid[i]
 
 
 
