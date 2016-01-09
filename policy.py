@@ -152,7 +152,7 @@ class Policy:
                         if entry['tankB']['id'] in enemyAttacked:
                             enemyAttacked[entry['tankB']['id']] += 1
                         else:
-                            enemyAttacked[entry['tankB']['id']] += 0
+                            enemyAttacked[entry['tankB']['id']] = 0
 
         # assign any remaining attackers to enemies
 ##        for attacker in remainingAttackers:
