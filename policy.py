@@ -68,9 +68,9 @@ class Policy:
     if evading the "predictedPosition" for the next update is appended to the tank
     '''
     def evade(self):
-        threatGrid = np.zeros(7)
 
         for myTank in self.myTanks:
+            hreatGrid = np.zeros(7)
             for i in range(7):
                 if i == 0:
                     newPosition = myTank['position']
