@@ -17,8 +17,26 @@ class Policy:
         self.predictionFactor = predictionFactor
         self.intp = Interpreter()
         self.tankPlans = {}
+        self.moveToCenter = False
 
     def newStatus(self, status):
+        # Do key sensing
+        key = ord(getch())
+        if key == 13:
+            if self.moveToCenter:
+                self.moveToCenter = False
+            else:
+                self.moveToCenter = True
+        elif key == 224:
+            key = ord(getch())
+            if key == 72:
+                self.predictionFactor += 0.1
+                print 'predictionFactor: ', self.predictionFactor
+            elif key == 80:
+                self.predictionFactor -= 0.1
+                print 'predictionFactor: ', self.predictionFactor
+
+
         if (not self.processStatus(status)):
             return
         self.intp.statusUpdate(status)
