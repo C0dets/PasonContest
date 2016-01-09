@@ -31,7 +31,7 @@ class Interpreter:
             'tankB': tankB
             }
         result['distance'] = mathHelper.distanceBetween(tankA['position'], tankB['position'])
-        angle['angle'] = mathHelper.angleFromAToB(tankA['position'], tankB['position'])
+        result['angle'] = mathHelper.angleFromAToB(tankA['position'], tankB['position'])
 
         return sorted(threats, key=lambda threat:threat['distance'])
 
