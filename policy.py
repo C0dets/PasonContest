@@ -77,12 +77,12 @@ class Policy:
     '''
     def evade(self):
         for myTank in self.myTanks:
-            threatGrid = np.zeros(5)
-            for i in range(5):
+            threatGrid = np.zeros(7)
+            for i in range(7):
                 if i == 0:
                     newPosition = myTank['position']
                 else:
-                    angle = 2*np.pi*i/4
+                    angle = 2*np.pi*i/6
                     newPosition = mathHelper.getLineEndpoint(myTank['position'], 2*myTank['hitRadius'], angle)
                 # TODO: Dodge enemy turrets
                 for projectile in self.intp.projectiles:
@@ -111,7 +111,7 @@ class Policy:
                 myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, self.lastAngle)
 
             elif i != 0:
-                reqAngle = 2*np.pi*i/4
+                reqAngle = 2*np.pi*i/6
                 myAngle = myTank['tracks']
                 diff = mathHelper.smallestAngleBetween(myAngle, reqAngle)
                 rotationReq = np.arctan(np.sin(diff)/ np.cos(diff))
