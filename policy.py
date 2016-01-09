@@ -85,9 +85,9 @@ class Policy:
                     angle = 2*np.pi*i/6
                     newPosition = mathHelper.getLineEndpoint(myTank['position'], 2*myTank['hitRadius'], angle)
                 # TODO: Dodge enemy turrets
-                enemyThreats = getThreatsToA(myTank, self.enemyTanks)
+                enemyThreats = self.intp.getThreatsToA(myTank, self.enemyTanks)
                 for enemyTank in enemyThreats:
-                    if canAshootB(enemyTank, myTank):
+                    if self.intp.canAshootB(enemyTank, myTank):
                         strikeDist = mathHelper.distanceBetween(myTank['position']+myTank['hitRadius'], enemyTank['position'])
                         threatGrid[i] = max(1/strikeDist, threatGrid[i])
                 for projectile in self.intp.projectiles:
