@@ -15,10 +15,7 @@ class Policy:
     def __init__(self, comm):
         self.comm = comm
         self.intp = Interpreter()
-        self.lasti = 0
-        self.lastDirection = 0
-        self.lastAngle = 0
-        self.lastThreat = 0
+        self.tankPlans = {}
 
     def newStatus(self, status):
         if (not self.processStatus(status)):
@@ -52,12 +49,21 @@ class Policy:
                 self.myTanks = player['tanks']
                 for tank in self.myTanks:
                     self.myTankIds.append(tank['id'])
+                    if tank['id'] not in self.tankPlans:
+                        self.tankPlans[tank['id']] = {
+                                'lasti': 0,
+                                'lastDirection': 0,
+                                'lastAngle': 0,
+                                'lastThreat': 0
+                            }
             else:
                 self.enemyTanks += player['tanks']
 
         return True
 
     def gameRefresh(self):
+        self.tankPlans = {}
+
         self.intp.refresh()
 
     def doAttacks(self):
@@ -101,19 +107,19 @@ class Policy:
 
             i = np.argmin(threatGrid)
 
-            if self.lastThreat <= threatGrid[i]:
-                i = self.lasti
+            if self.tankPlans[myTank['id']].lastThreat <= threatGrid[i]:
+                i = self.tankPlans[myTank['id']].lasti
 
             direction = 0
             myNewAngle = 0
 
-            if i == self.lasti and i!= 0:
-                direction = self.lastDirection
+            if i == self.tankPlans[myTank['id']].lasti and i!= 0:
+                direction = self.tankPlans[myTank['id']].lastDirection
                 self.comm.move(myTank['id'], direction, 2*myTank['hitRadius'])
 
                 predictedDist = self.intp.avgPeriod * myTank['speed']
 
-                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, self.lastAngle)
+                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, self.tankPlans[myTank['id']].lastAngle)
 
             elif i != 0:
                 reqAngle = 2*np.pi*i/6
@@ -144,10 +150,10 @@ class Policy:
             else:
                 myTank['predictedPosition'] = myTank['position']
 
-            self.lastDirection = direction
-            self.lasti = i
-            self.lastAngle = myNewAngle
-            self.lastThreat = threatGrid[i]
+            self.tankPlans[myTank['id']].lastDirection = direction
+            self.tankPlans[myTank['id']].lasti = i
+            self.tankPlans[myTank['id']].lastAngle = myNewAngle
+            self.tankPlans[myTank['id']].lastThreat = threatGrid[i]
 
 
 
@@ -203,6 +209,8 @@ class Policy:
 
         # assign any remaining attackers to enemies
         for attacker in remainingAttackers:
+            # nobody to fire at so stop firinging
+            self.comm.stop(myTank['id'], 'FIRE')
             # Find closest enemy via path finding and assign that enemy
             myCorrelations = [cor for cor in correlationArr if cor['tankA']['id'] == attacker]
             myCorrelations = sorted(myCorrelations, key=lambda entry:entry['distance'])
