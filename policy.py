@@ -12,8 +12,9 @@ PROJECTILE_SPEED = 30
 ROTATION_SPEED = 1.5
 
 class Policy:
-    def __init__(self, comm):
+    def __init__(self, comm, predictionFactor):
         self.comm = comm
+        self.predictionFactor = predictionFactor
         self.intp = Interpreter()
         self.tankPlans = {}
 
@@ -223,7 +224,7 @@ class Policy:
         # Rotate turret appropriately
         for attacker in usedAttackers:
             # add predicitve factor to rotation
-            angleToRotate = usedAttackers[attacker]['turretChange'] * 1.1
+            angleToRotate = usedAttackers[attacker]['turretChange'] * self.predictionFactor
             self.comm.rotateTurret(attacker, angleToRotate)
 
 
