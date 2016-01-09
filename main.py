@@ -7,7 +7,7 @@ from policy import Policy
 if len(sys.argv) < 4:
     sys.exit("Please provide in this order the match token and server addres(es)")
 else:
-    predictionFactor = sys.argv[1]
+    predictionFactor = float(sys.argv[1])
     matchToken = sys.argv[2]
     commandServerAdd = sys.argv[3]
     stateServerAdd = sys.argv[3]
