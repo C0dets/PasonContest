@@ -1,6 +1,5 @@
 from __future__ import division
 import sys
-from msvcrt import getch
 from communication import Comm
 from policy import Policy
 
