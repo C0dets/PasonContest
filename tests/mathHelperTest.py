@@ -1,3 +1,4 @@
+from __future__ import division
 import numpy as np
 import sys
 sys.path.insert(0, '../')  ## Add interpreter's path
@@ -40,6 +41,28 @@ def smallestAngleBetween():
     tester.compare(truncate(-twoPi*3/6), truncate(mathHelper.smallestAngleBetween(twoPi*2/6, twoPi*5/6)))
     tester.compare(truncate(twoPi*3/6), truncate(mathHelper.smallestAngleBetween(twoPi*5/6, twoPi*2/6)))
 
+def rectOnLine():
+    '''
+    args: lineStart, lineEnd, rectStartPoint, rectDimensions
+    '''
+    tester = Tester('rectOnLine')
+    rectPos = [5, 5]
+    rectSize = [5, 5]
+
+    tester.compare(True, mathHelper.rectOnLine([6, 11], [6, 4], rectPos, rectSize))
+    tester.compare(True, mathHelper.rectOnLine([6, 6], [6, 4], rectPos, rectSize))
+    tester.compare(True, mathHelper.rectOnLine([6, 11], [7, 4], rectPos, rectSize))
+    tester.compare(True, mathHelper.rectOnLine([6, 11], [6, 6], rectPos, rectSize))
+    tester.compare(True, mathHelper.rectOnLine([6, 4], [6, 11], rectPos, rectSize))
+
+    tester.compare(True, mathHelper.rectOnLine([11, 9], [6, 4], rectPos, rectSize))
+    tester.compare(False, mathHelper.rectOnLine([6, 1], [7, 1], rectPos, rectSize))
+    tester.compare(False, mathHelper.rectOnLine([6, 1], [7, 2], rectPos, rectSize))
+    tester.compare(False, mathHelper.rectOnLine([9, 1], [15, 6], rectPos, rectSize))
+    tester.compare(False, mathHelper.rectOnLine([1, 11], [11, 11], rectPos, rectSize))
+
+    tester.compare(False, mathHelper.rectOnLine([1, 11], [11, 12], rectPos, rectSize))
+
 def circleOnLine():
     ## Should return the distance to an intersection point
     if (mathHelper.circleOnLine([0,0],[10,0],[5,1],1) != 5):
@@ -60,6 +83,7 @@ def circleOnLine():
 def test():
     angleInRange()
     smallestAngleBetween()
+    rectOnLine()
     circleOnLine()
     print 'mathHelper tests Finished!'
 

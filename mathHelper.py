@@ -1,3 +1,4 @@
+from __future__ import division
 import math
 import numpy as np
 
@@ -132,7 +133,7 @@ def rectOnLine(lineStart, lineEnd, rectStartPoint, rectDimensions):
 
     if (rectBottom > yAtRectRight and rectBottom > yAtRectLeft):
         return False
-    if (rectTop > yAtRectRight and rectTop > yAtRectLeft):
+    if (rectTop < yAtRectRight and rectTop < yAtRectLeft):
         return False
 
     return True
@@ -148,3 +149,8 @@ def circleOnRect(corner, size, centre, radius):
         return True
     return False
 
+
+if __name__ == "__main__":
+    rectPos = [5, 5]
+    rectSize = [5, 5]
+    rectOnLine([9, 1], [15, 6], rectPos, rectSize)

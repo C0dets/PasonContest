@@ -1,3 +1,5 @@
+from __future__ import division
+
 class Tester:
     def __init__(self, testName):
         self.testName = testName

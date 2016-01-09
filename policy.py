@@ -1,3 +1,4 @@
+from __future__ import division
 import credentials
 import mathHelper
 import numpy as np
