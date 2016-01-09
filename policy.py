@@ -149,7 +149,9 @@ class Policy:
                 myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
 
             else:
-                myTank['predictedPosition'] = myTank['position']
+                self.comm.move(myTank['id'], "FWD", 2*myTank['hitRadius'])
+                predictedDist = self.intp.avgPeriod * myTank['speed']
+                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myTank['tracks'])
 
             #self.tankPlans[myTank['id']]['lastDirection'] = direction
             #self.tankPlans[myTank['id']]['lasti'] = i
@@ -224,7 +226,7 @@ class Policy:
         # Rotate turret appropriately
         for attacker in usedAttackers:
             # add predicitve factor to rotation
-            angleToRotate = usedAttackers[attacker]['turretChange'] * 1.1
+            angleToRotate = usedAttackers[attacker]['turretChange'] * 1.5
             self.comm.rotateTurret(attacker, angleToRotate)
 
 
