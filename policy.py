@@ -137,6 +137,10 @@ class Policy:
                 myTank['position'] = myTank['predictedPosition']
             for enTank in self.enemyTanks:
                 tempCor = self.intp.correlationAtoB(myTank, enTank)
+                if tempCor['distance'] > PROJECTILE_RANGE + self.intp.avgPeriod * enTank['speed'] * 3:
+                    tempCor['shootable'] = False
+                else:
+                    tempCor['shootable'] = self.intp.isShotClear(myTank['position'], enTank['position'])
                 tempCor['turretChange'] = mathHelper.smallestAngleBetween(myTank['turret'], tempCor['angle'])
                 correlationArr.append(tempCor)
         # Sort the array, smallest abs angle chang first
@@ -146,20 +150,22 @@ class Policy:
         usedAttackers = {}
         enemyAttacked = {}
         for entry in correlationArr:
-            # Check if attacking tank is available
-            if entry['tankA']['id'] not in usedAttackers:
-                # Check that enemy doesn't have too many attackers (max attackers = roundUp(remainingHeath/ProjDmg) + 1)
-                if entry['tankB']['id'] not in enemyAttacked or enemyAttacked[entry['tankB']['id']] <= np.ceil(entry['tankB']['health'] / PROJECTILE_DAMAGE) + 1:
-                    # Check that attacker is actually close enough
-                    if entry['distance'] < PROJECTILE_RANGE + self.intp.avgPeriod * entry['tankB']['speed']:
-                        # assign the attaker to the enemy tank
-                        remainingAttackers.remove(entry['tankA']['id'])
-                        entry['targetId'] = entry['tankB']['id']
-                        usedAttackers[entry['tankA']['id']] = entry
-                        if entry['tankB']['id'] in enemyAttacked:
-                            enemyAttacked[entry['tankB']['id']] += 1
-                        else:
-                            enemyAttacked[entry['tankB']['id']] = 0
+            # Check that the enemy is shootable
+            if entry['shootable']:
+                # Check if attacking tank is available
+                if entry['tankA']['id'] not in usedAttackers:
+                    # Check that enemy doesn't have too many attackers (max attackers = roundUp(remainingHeath/ProjDmg) + 1)
+                    if entry['tankB']['id'] not in enemyAttacked or enemyAttacked[entry['tankB']['id']] <= np.ceil(entry['tankB']['health'] / PROJECTILE_DAMAGE) + 1:
+                        # Check that attacker is actually close enough
+                        if entry['distance'] < PROJECTILE_RANGE + self.intp.avgPeriod * entry['tankB']['speed']:
+                            # assign the attaker to the enemy tank
+                            remainingAttackers.remove(entry['tankA']['id'])
+                            entry['targetId'] = entry['tankB']['id']
+                            usedAttackers[entry['tankA']['id']] = entry
+                            if entry['tankB']['id'] in enemyAttacked:
+                                enemyAttacked[entry['tankB']['id']] += 1
+                            else:
+                                enemyAttacked[entry['tankB']['id']] = 0
 
         # assign any remaining attackers to enemies
         for attacker in remainingAttackers:
