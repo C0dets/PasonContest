@@ -86,13 +86,13 @@ class Interpreter:
 
     def whoWouldIShoot(self, tank1):
         target = False
-        targetDistance = PROJECTILE_RANGE * 2 ## Just put it at a ridiculous range to start
-        ## get the end point for tank1's range
+        targetDistance = PROJECTILE_RANGE * 2 # Just put it at a ridiculous range to start
+        # get the end point for tank1's range
         endPoint = mathHelper.getLineEndpoint(tank1['position'], PROJECTILE_RANGE, tank1['turret'])
 
         for tankId in self.tanks:
             tank = self.tanks[tankId]
-            ## Don't consider self
+            # Don't consider self
             if (tank['id'] == tank1['id']):
                 continue
             distanceToIntersection = mathHelper.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])
@@ -100,7 +100,11 @@ class Interpreter:
                 targetDistance = distanceToIntersection
                 target = tank
 
-        ## Ensure path is clear of solids
+        if taget == False:
+            return False
+
+        # Ensure path is clear of solids
+        endPoint = mathHelper.getLineEndpoint(tank1['position'], targetDistance, tank1['turret'])
         if self.isShotClear(tank1['position'], endPoint):
             return target
         else:
