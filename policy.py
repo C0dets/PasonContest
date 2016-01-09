@@ -28,11 +28,11 @@ class Policy:
 
     ##    Check if any tank is in danger, move away  (Do predictive calculations by observing past status and extrapolating?)
         self.evade()
-
-        self.offensivePositioning()
-
         if (self.timePass > 180):
             self.escapeShrinking()
+        self.offensivePositioning()
+
+
 
     def processStatus(self, status):
         if (self.timeStart == 0):
