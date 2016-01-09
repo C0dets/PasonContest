@@ -99,11 +99,52 @@ def circleOnLine(lineStart, lineEnd, circleCentre, circleRadius):
         return False
 
 def getLineEndpoint(lineStart, lineLength, lineAngle):
-        x = lineLength * math.cos(lineAngle)
-        y = lineLength * math.sin(lineAngle)
+    x = lineLength * math.cos(lineAngle)
+    y = lineLength * math.sin(lineAngle)
 
-        return [lineStart[0]+x,lineStart[1]+y]
+    return [lineStart[0]+x,lineStart[1]+y]
 
 def rectOnLine(lineStart, lineEnd, rectStartPoint, rectDimensions):
+
+    Ax = lineStart[0]
+    Ay = lineStart[1]
+    Bx = lineEnd[0]
+    By = lineEnd[1]
+
+    rectTop = rectStartPoint[1]+rectDimensions[1]
+    rectBottom = rectStartPoint[1]
+    rectRight = rectStartPoint[0]+rectDimensions[0]
+    rectLeft = rectStartPoint[0]
+
+    if np.max(Ax, Bx) < rectStartPoint[0] or np.min(Ax, Bx) > rectStartPoint[0]+rectDimensions[0]:
+        return False
+    if np.max(Ay, By) < rectStartPoint[1] or np.min(Ay, By) > rectStartPoint[1]+rectDimensions[1]:
+        return False
+
+    if (Bx == Ax):
+        return True
+    else:
+        m = (By - Ay) / (Bx - Ax)
+        b = By - m*Bx
+
+        yAtRectLeft = m*rectLeft + b
+        yAtRectRight = m*rectRight + b
+
+    if (rectStartPoint[1] > yAtRectRight and rectStartPoint[1] > yAtRectLeft):
+        return False
+    if (rectStartPoint[1]+rectDimensions[1] > yAtRectRight and rectStartPoint[1]+rectDimensions[1] > yAtRectLeft):
+        return False
+
+    return True
+
+def circleOnRect(corner, size, centre, radius):
+    if circleOnLine(corner, [corner[0]+size[0], corner[1]], centre, radius):
+        return True
+    if circleOnLine(corner, [corner[0], corner[1]+size[1]], centre, radius):
+        return True
+    if circleOnLine([corner[0], corner[1]+size[1], [corner[0]+size[0], corner[1]+size[1]], centre, radius):
+        return True
+    if circleOnLine([corner[0]+size[0], corner[1]], [corner[0]+size[0], corner[1]+size[1]], centre, radius):
+        return True
     return False
 

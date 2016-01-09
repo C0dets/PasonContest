@@ -76,7 +76,7 @@ class Policy:
                     if mathHelper.circleOnLine(A, B, newPosition, myTank['hitRadius']):
                         threatGrid[i] = max(1/projectile['range'], threatGrid[i])
             
-                if self.intp.wallInWay(newPosition, myTank['collisionRadius']):
+                if self.intp.obstacleInWay(newPosition, myTank['collisionRadius']):
                     threatGrid[i] = max(10, threatGrid[i])
 
             i = np.min(threatGrid)
@@ -101,7 +101,12 @@ class Policy:
                 else:
                     direction = "REV"
 
-                self.comm.move(myTank['id'], direction, myTank['hitRadius'])
+                self.comm.move(myTank['id'], direction, 10)
+
+                predictedDist = self.inp.avgPeriod * myTank['speed']
+    
+                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
+
 
 
     '''

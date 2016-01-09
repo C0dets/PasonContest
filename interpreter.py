@@ -140,7 +140,10 @@ class Interpreter:
 
         return threats
 
-    def wallInWay(self, position, size):
-
+    def obstacleInWay(self, position, size):
+        for terrain in self.mapTerrain:
+            if mathHelper.circleOnRect(terrain['boundingBox']['corner'], terrain['boundingBox']['size'], position, size):
+                return True
+        return False
 
 
