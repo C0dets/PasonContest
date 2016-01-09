@@ -75,7 +75,7 @@ class Policy:
                     newPosition = myTank['position']
                 else:
                     angle = 2*np.pi/i
-                    newPosition = getLineEndpoint(myTank['position'], myTank['hitRadius'], angle)
+                    newPosition = mathHelper.getLineEndpoint(myTank['position'], myTank['hitRadius'], angle)
                 for projectile in self.intp.projectiles:
                     A = projectile['position']
                     B = mathHelper.getLineEndpoint(A, projectile['range'], projectile['direction'])
