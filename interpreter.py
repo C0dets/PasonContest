@@ -136,7 +136,7 @@ class Interpreter:
 
         return threats
 
-
+    def wallInWay(self, position, size):
 
 
 
