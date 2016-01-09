@@ -139,7 +139,7 @@ class Policy:
                 tempCor['turretChange'] = mathHelper.smallestAngleBetween(myTank['turret'], tempCor['angle'])
                 correlationArr.append(tempCor)
         # Sort the array, smallest abs angle chang first
-        sorted(correlationArr, key=lambda entry:np.absolute(entry['turretChange']))
+        correlationArr = sorted(correlationArr, key=lambda entry:np.absolute(entry['turretChange']))
 
         remainingAttackers = copy.deepcopy(self.myTankIds)
         usedAttackers = {}
@@ -150,7 +150,7 @@ class Policy:
                 # Check that enemy doesn't have too many attackers (max attackers = roundUp(remainingHeath/ProjDmg) + 1)
                 if entry['tankB']['id'] not in enemyAttacked or enemyAttacked[entry['tankB']['id']] <= np.ceil(entry['tankB']['health'] / PROJECTILE_DAMAGE) + 1:
                     # Check that attacker is actually close enough
-                    if entry['distance'] < PROJECTILE_RANGE + self.intp.avgPeriod * PROJECTILE_SPEED:
+                    if entry['distance'] < PROJECTILE_RANGE + self.intp.avgPeriod * entry['tankB']['speed']:
                         # assign the attaker to the enemy tank
                         remainingAttackers.remove(entry['tankA']['id'])
                         entry['targetId'] = entry['tankB']['id']
