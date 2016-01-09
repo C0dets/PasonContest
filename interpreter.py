@@ -115,8 +115,8 @@ class Interpreter:
         for terrain in self.mapTerrain:
             if terrain['type'] == 'SOLID':
                 if mathHelper.rectOnLine(terrain['boundingBox']['corner'], terrain['boundingBox']['size'], startPoint, endPoint):
-                    return True
-        return False
+                    return False
+        return True
 
     def statusUpdate(self, status):
         self.periodCalculator(status["timestamp"])
