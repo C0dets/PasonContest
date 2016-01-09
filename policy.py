@@ -77,7 +77,7 @@ class Policy:
     '''
     def evade(self):
         for myTank in self.myTanks:
-            threatGrid = np.zeros(7)
+            threatGrid = np.zeros(5)
             for i in range(5):
                 if i == 0:
                     newPosition = myTank['position']
