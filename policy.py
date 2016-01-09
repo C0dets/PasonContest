@@ -220,6 +220,8 @@ class Policy:
                 if cor['distance'] < PROJECTILE_RANGE + self.intp.avgPeriod * cor['tankB']['speed'] * 2:
                     cor['targetId'] = cor['tankB']['id' ]
                     usedAttackers[attacker] = cor
+                else:
+                    break
 
             # find closest shootable friend and move somewhat close to them  (like 30 away?)
 
