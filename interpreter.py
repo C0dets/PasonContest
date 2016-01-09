@@ -35,6 +35,22 @@ class Interpreter:
 
         return result
 
+    '''
+    Checks if A is threatened by any enemyTanks
+    Returns an array of the threatening tanks, most threatening first
+    '''
+    def getThreatsToA(self, tankA, enemyTanks):
+        threats = []
+        for enTank in enemyTanks:
+            ## Check if in dangerous range
+            dangerousRange = PROJECTILE_RANGE + self.avgPeriod * enTank['speed'] * 1.1
+            distance = mathHelper.distanceBetween(tankA['position'], enTank['position'])
+            if (distance < dangerousRange):
+                ## Check if obstacles in the way
+                if not self.isSolidOnLine(tankA['position'], enTank['position']):
+                    threats.append({'tank': enTank, 'distance': distance})
+        return sorted(threats, key=lambda threat:threat['distance'])
+
     def canAshootB(self, tank1Id, tank2Id):
         tank1 = self.tanks[tank1Id]
         tank2 = self.tanks[tank2Id]
@@ -122,10 +138,10 @@ class Interpreter:
 
         ## Calc current period
         if (self.lastTimeStamp != False):
-            self.period = timeStamp - self.lastTimeStamp
+            self.period = (timeStamp - self.lastTimeStamp) / 1000
 
         ## Calc avg period
-        if (self.statusUpdates > 1):
+        if (self.statusUpdates >= 1):
             self.avgPeriod = (self.avgPeriod * (self.statusUpdates - 1) + self.period) / self.statusUpdates
 
         ## Move timestamp
