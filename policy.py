@@ -1,8 +1,14 @@
 import credentials
 import mathHelper
 import numpy as np
+import copy
 
 from interpreter import Interpreter
+
+PROJECTILE_DAMAGE = 100
+PROJECTILE_RANGE = 100
+PROJECTILE_SPEED = 30
+ROTATION_SPEED = 1.5
 
 class Policy:
     def __init__(self, comm):
@@ -58,7 +64,7 @@ class Policy:
 
     '''
     Makes neccessary evasion movements
-    if evading the "predictedLocation" for the next update is appended to the tank
+    if evading the "predictedPosition" for the next update is appended to the tank
     '''
     def evade(self):
         threatGrid = np.zeros(7)
@@ -85,11 +91,23 @@ class Policy:
 
 
     '''
-    Should only move tanks not already moved
+    Should only move tanks not with a "predictedPosition" (because evade has already dictated a movement)
+
+    This tries to account for predictedPosition in it's turret placing.
+    Basically if we end up using the predicted and not the actual the prediction
+    will pretend the enemy is not moving, otherwise the prediction will assume we
+    are stationary and that the enmeny will continue to move.  Essentially, either
+    way the prediction will overshoot it's exact required rotation by one period's
+    to hopefully account for some movement.
     '''
     def offensivePositioning(self):
         correlationArr = []
-        for myTank in self.myTanks:
+        myPredictedTanks = copy.deepcopy(self.myTanks)
+        for myTank in myPredictedTanks:
+            # Account for the predicted position
+            myTank['actualPosition'] = myTank['position']
+            if 'predictedPosition' in myTank:
+                myTank['position'] = myTank['predictedPosition']
             for enTank in self.enemyTanks:
                 tempCor = self.intp.correlationAtoB(myTank, enTank)
                 tempCor['turrentChange'] = mathHelper.smallestAngleBetween(myTank['turret'], tempCor['angle'])
@@ -97,6 +115,34 @@ class Policy:
         # Sort the array, smallest abs angle chang first
         sorted(correlationArr, key=lambda entry:np.absolute(entry['turrentChange']))
 
+        remainingAttackers = copy.deepcopy(self.myTankIds)
+        usedAttackers = {}
+        enemyAttacked = {}
+        for entry in correlationArr:
+            # Check if attacking tank is available
+            if entry['tankA']['id'] not in usedAttackers:
+                # Check that enemy doesn't have too many attackers (max attackers = roundUp(remainingHeath/ProjDmg) + 1)
+                if entry['tankB']['id'] not in enemyAttacked or enemyAttacked[entry['tankB']['id']] <= np.ceil(entry['tankB']['health'] / PROJECTILE_DAMAGE) + 1:
+                    # Check that attacker is actually close enough
+                    if entry['distance'] < PROJECTILE_RANGE + self.intp.avgPeriod * PROJECTILE_SPEED:
+                        # assign the attaker to the enemy tank
+                        remainingAttackers.remove(entry['tankA']['id'])
+                        entry['targetId'] = entry['tankB']['id']
+                        usedAttackers[entry['tankA']['id']] = entry
+                        if entry['tankB']['id'] in enemyAttacked:
+                            enemyAttacked[entry['tankB']['id']] += 1
+                        else:
+                            enemyAttacked[entry['tankB']['id']] += 0
+
+        # assign any remaining attackers to enemies
+##        for attacker in remainingAttackers:
+            # Find closest enemy via path finding and assign that
+
+        # Rotate turret appropriately
+        for attacker in usedAttackers:
+            # add predicitve factor to rotation
+            angleToRotate = attacker['turretChange'] + self.intp.avgPeriod * ROTATION_SPEED
+            self.comm.rotateTurret(attacker, angleToRotate)
 
         return
 
