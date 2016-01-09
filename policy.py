@@ -111,7 +111,7 @@ class Policy:
 
                 self.comm.move(myTank['id'], direction, 10)
 
-                predictedDist = self.inp.avgPeriod * myTank['speed']
+                predictedDist = self.intp.avgPeriod * myTank['speed']
     
                 myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
 
