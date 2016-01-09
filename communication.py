@@ -71,7 +71,7 @@ class Comm:
     def sendCommand(self, command):
         command["client_token"] = self.clientToken
 ##        print 'sending', command
-        self.commandChannel.send(json.dumps(command))
+        self.commandChannel.send(json.dumps(command), zmq.NOBLOCK)
 ##        print 'sent'
         message = json.loads(self.commandChannel.recv())
 ##        print 'recieved'
