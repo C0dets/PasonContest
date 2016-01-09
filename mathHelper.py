@@ -1,4 +1,5 @@
 import math
+import numpy as np
 
 def distanceBetween(point1, point2):
     xDist = point2[0] - point1[0]
@@ -40,6 +41,22 @@ def angleInRange(act, upper, lower):
     if ((act < upper and act > lower) or (act < altUpper and act > altLower)):
         return True
     return False
+
+'''
+Finds the smallest angle between two angles
+'''
+def smallestAngleBetween(angA, angB):
+    dif = angB - angA
+    altDif = np.pi ## angle between in other direction
+    if dif > 0:
+        altDif = -2 * np.pi + dif
+    else:
+        altDif = 2 * np.pi + dif
+
+    if np.absolute(dif) < np.absolute(altDif):
+        return dif
+    else:
+        return altDif
 
 def circleOnLine(lineStart, lineEnd, circleCentre, circleRadius):
     Ax = lineStart[0]
@@ -84,9 +101,9 @@ def circleOnLine(lineStart, lineEnd, circleCentre, circleRadius):
 def getLineEndpoint(lineStart, lineLength, lineAngle):
         x = lineLength * math.cos(lineAngle)
         y = lineLength * math.sin(lineAngle)
-        
+
         return [lineStart[0]+x,lineStart[1]+y]
-        
+
 def rectOnLine(lineStart, lineEnd, rectStartPoint, rectDimensions):
     return False
 

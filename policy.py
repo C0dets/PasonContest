@@ -62,7 +62,7 @@ class Policy:
     '''
     def evade(self):
         threatGrid = np.zeros(7)
-        
+
         for myTank in self.myTanks:
             for i in range(7):
                 for projectile in self.intp.projectiles:
@@ -73,23 +73,30 @@ class Policy:
                         newPosition = getLineEndpoint(myTank['position'], hitRadius, angle)
                     A = projectile['position']
                     B = mathHelper.getLineEndpoint(A, projectile['range'], projectile['direction'])
-                    if mathHelper.circleOnLine(A, B, newPosition, myTank['hitRadius'])
+                    if mathHelper.circleOnLine(A, B, newPosition, myTank['hitRadius']):
                         threatGrid[i] = max(1/projectile['range'], threatGrid[i])
-            
+
             i = np.min(threatGrid)
-        
+
             ##if i != 0:
             ##    angle = 2*np.pi/i
             ##    rotationDirection = myTank['tracks']-angle
             ##    if rotationDirection > 0:
-                    
+
 
     '''
     Should only move tanks not already moved
     '''
     def offensivePositioning(self):
+        correlationArr = []
         for myTank in self.myTanks:
-            myTank['threats'] = self.intp.getThreatsToA(myTank, self.enemyTanks)
+            for enTank in self.enemyTanks:
+                tempCor = self.intp.correlationAtoB(myTank, enTank)
+                tempCor['turrentChange'] = mathHelper.smallestAngleBetween(myTank['turret'], tempCor['angle'])
+                correlationArr.append(tempCor)
+        # Sort the array, smallest abs angle chang first
+        sorted(correlationArr, key=lambda entry:np.absolute(entry['turrentChange']))
+
 
         return
 

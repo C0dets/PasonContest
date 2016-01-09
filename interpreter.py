@@ -16,19 +16,23 @@ class Interpreter:
         return
 
     '''
-    Checks if A is threatened by any enemyTanks
-    Returns an array of the threatening tanks, most threatening first
+    Returns an object:
+        {
+            tankA: tankA,
+            tankB: tankB,
+            angle: 1.2, #the angle in rads from A to B
+            distance: 50.1 #the distance from A to B
+        }
+
     '''
-    def getThreatsToA(self, tankA, enemyTanks):
-        threats = []
-        for enTank in enemyTanks:
-            ## Check if in dangerous range
-            dangerousRange = PROJECTILE_RANGE + self.avgPeriod * enTank['speed'] * 1.1
-            distance = mathHelper.distanceBetween(tankA['position'], enTank['position'])
-            if (distance < dangerousRange):
-                ## Check if obstacles in the way
-                if not self.isSolidOnLine(tankA['position'], enTank['position']):
-                    threats.append({'tank': enTank, 'distance': distance})
+    def correlationAtoB(self, tankA, tankB):
+        result = {
+            'tankA': tankA,
+            'tankB': tankB
+            }
+        result['distance'] = mathHelper.distanceBetween(tankA['position'], tankB['position'])
+        angle['angle'] = mathHelper.angleFromAToB(tankA['position'], tankB['position'])
+
         return sorted(threats, key=lambda threat:threat['distance'])
 
     def canAshootB(self, tank1Id, tank2Id):
