@@ -211,12 +211,12 @@ class Policy:
         for attacker in remainingAttackers:
             # nobody to fire at so stop firinging
             self.comm.stop(myTank['id'], 'FIRE')
-            # Find closest enemy via path finding and assign that enemy
-            myCorrelations = [cor for cor in correlationArr if cor['tankA']['id'] == attacker]
-            myCorrelations = sorted(myCorrelations, key=lambda entry:entry['distance'])
-            for cor in myCorrelations:
-                cor['targetId'] = cor['tankB']['id']
-                usedAttackers[attacker] = entry
+##            # Find closest enemy via path finding and assign that enemy
+##            myCorrelations = [cor for cor in correlationArr if cor['tankA']['id'] == attacker]
+##            myCorrelations = sorted(myCorrelations, key=lambda entry:entry['distance'])
+##            for cor in myCorrelations:
+##                cor['targetId'] = cor['tankB']['id']
+##                usedAttackers[attacker] = entry
 
             # find closest shootable friend and move somewhat close to them  (like 30 away?)
 
