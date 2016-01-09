@@ -17,6 +17,7 @@ class Policy:
         self.intp = Interpreter()
         self.lasti = 0
         self.lastDirection = 0
+        self.lastAngle = 0
         self.lastThreat = 0
 
     def newStatus(self, status):
@@ -104,7 +105,7 @@ class Policy:
 
                 predictedDist = self.intp.avgPeriod * myTank['speed']
 
-                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
+                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, self.lastAngle)
 
             elif i != 0:
                 reqAngle = 2*np.pi*i/6
@@ -134,9 +135,12 @@ class Policy:
 
             else:
                 direction = 0
+                myNewAngle = 0
+                myTank['predictedPosition'] = myTank['position']
 
             self.lastDirection = direction
             self.lasti = i
+            self.lastAngle = myNewAngle
             self.lastThreat = threatGrid[i]
 
 
