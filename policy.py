@@ -114,7 +114,6 @@ class Policy:
                 reqAngle = 2*np.pi*i/6
                 myAngle = myTank['tracks']
 		diff = myAngle - reqAngle
-                #diff = mathHelper.smallestAngleBetween(myAngle, reqAngle)
                 rotationReq = np.arctan(np.sin(diff)/ np.cos(diff))
 
                 self.comm.rotateTank(myTank['id'], rotationReq)
