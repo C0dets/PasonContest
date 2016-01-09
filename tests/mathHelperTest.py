@@ -1,6 +1,9 @@
+import numpy as np
 import sys
 sys.path.insert(0, '../')  ## Add interpreter's path
 import mathHelper
+from tester import Tester
+
 
 def angleInRange():
     ## Should return true
@@ -23,14 +26,28 @@ def angleInRange():
     if (not mathHelper.angleInRange(4, 8, 5) == False):
         raise Exception('Failed angleInRange')
 
+def smallestAngleBetween():
+    tester = Tester('smallestAngleBetween')
+    twoPi = np.pi * 2
+    def truncate(num):
+        return '%.4f'%(num)
+    tester.compare(truncate(-twoPi*2/6), truncate(mathHelper.smallestAngleBetween(twoPi*1/6, twoPi*5/6)))
+    tester.compare(truncate(twoPi*2/6), truncate(mathHelper.smallestAngleBetween(twoPi*5/6, twoPi*1/6)))
+
+    tester.compare(truncate(twoPi*1/6), truncate(mathHelper.smallestAngleBetween(twoPi*1/6, twoPi*2/6)))
+    tester.compare(truncate(-twoPi*1/6), truncate(mathHelper.smallestAngleBetween(twoPi*2/6, twoPi*1/6)))
+
+    tester.compare(truncate(-twoPi*3/6), truncate(mathHelper.smallestAngleBetween(twoPi*2/6, twoPi*5/6)))
+    tester.compare(truncate(twoPi*3/6), truncate(mathHelper.smallestAngleBetween(twoPi*5/6, twoPi*2/6)))
+
 def circleOnLine():
     ## Should return the distance to an intersection point
     if (mathHelper.circleOnLine([0,0],[10,0],[5,1],1) != 5):
-        raise Exception('Failed circleOnLine')    
+        raise Exception('Failed circleOnLine')
     if (mathHelper.circleOnLine([0,5],[10,5],[5,5],1) != 4):
-        raise Exception('Failed circleOnLine')    
+        raise Exception('Failed circleOnLine')
     if (mathHelper.circleOnLine([0,5],[10,5],[0,5],1) != 1):
-        raise Exception('Failed circleOnLine')    
+        raise Exception('Failed circleOnLine')
     if (mathHelper.circleOnLine([0,5],[10,5],[10,5],1) != 9):
         raise Exception('Failed circleOnLine')
 
@@ -42,5 +59,12 @@ def circleOnLine():
 
 def test():
     angleInRange()
+    smallestAngleBetween()
     circleOnLine()
-    print 'All mathHelper tests passed!'
+    print 'mathHelper tests Finished!'
+
+if __name__ == "__main__":
+    test()
+
+
+
