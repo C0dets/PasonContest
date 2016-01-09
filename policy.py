@@ -78,7 +78,7 @@ class Policy:
                     newPosition = myTank['position']
                 else:
                     angle = 2*np.pi/i
-                    newPosition = mathHelper.getLineEndpoint(myTank['position'], myTank['hitRadius'], angle)
+                    newPosition = mathHelper.getLineEndpoint(myTank['position'], 2*myTank['hitRadius'], angle)
                 for projectile in self.intp.projectiles:
                     A = projectile['position']
                     B = mathHelper.getLineEndpoint(A, projectile['range'], projectile['direction'])
@@ -111,7 +111,7 @@ class Policy:
 
                 self.comm.move(myTank['id'], direction, 10)
 
-                predictedDist = self.inp.avgPeriod * myTank['speed']
+                predictedDist = self.intp.avgPeriod * myTank['speed']
     
                 myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
 
