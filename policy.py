@@ -16,6 +16,8 @@ class Policy:
         self.comm = comm
         self.intp = Interpreter()
         self.tankPlans = {}
+        self.timePass = 0
+        self.timeStart = 0
 
     def newStatus(self, status):
         if (not self.processStatus(status)):
@@ -29,8 +31,13 @@ class Policy:
 
         self.offensivePositioning()
 
+        if (self.timePass > 180):
+            self.escapeShrinking()
 
     def processStatus(self, status):
+        if (self.timeStart == 0):
+            self.timeStart = status['timestamp']
+        self.timePass = status['timestamp'] - self.timeStart
         if ("map" not in status):
             print 'missing map'
             print status
@@ -63,7 +70,8 @@ class Policy:
 
     def gameRefresh(self):
         self.tankPlans = {}
-
+        self.timePass = 0
+        self.timeStart = 0
         self.intp.refresh()
 
     def doAttacks(self):
@@ -149,9 +157,7 @@ class Policy:
                 myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
 
             else:
-                self.comm.move(myTank['id'], "FWD", 2*myTank['hitRadius'])
-                predictedDist = self.intp.avgPeriod * myTank['speed']
-                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myTank['tracks'])
+                myTank['predictedPosition'] = myTank['position']
 
             #self.tankPlans[myTank['id']]['lastDirection'] = direction
             #self.tankPlans[myTank['id']]['lasti'] = i
@@ -231,3 +237,30 @@ class Policy:
 
 
         return
+
+    def escapeShrinking(self):
+        centre = [self.intp.mapSize[0]/2, self.intp.mapSize[1]/2] 
+        for myTank in self.myTanks:
+            reqAngle = mathHelper.angleFromAToB(myTank['position'], centre)
+            myAngle = myTank['tracks']
+            diff = myAngle - reqAngle
+            rotationReq = np.arctan(np.sin(diff)/ np.cos(diff))
+
+            self.comm.rotateTank(myTank['id'], rotationReq)
+
+            myNewAngle = myAngle+rotationReq
+
+            if myNewAngle < 0:
+                myNewAngle += 2*np.pi
+            if myNewAngle > 2*np.pi:
+                myNewAngle -= 2*np.pi
+
+            if myNewAngle != reqAngle:
+                direction = "REV"
+            else:
+                direction = "FWD"
+
+            predictedDist = self.intp.avgPeriod * myTank['speed']
+            self.comm.move(myTank['id'], direction, 2*predictedDist)
+
+            myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
