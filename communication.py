@@ -67,7 +67,8 @@ class Comm:
                         self.policy.newStatus(latestStatus)
                         latestStatus = 0
                     except:
-                        print "Unexpected error:", traceback.format_exc()
+                        blah = 0
+##                        print "Unexpected error:", traceback.format_exc()
 
     def sendCommand(self, command):
         command["client_token"] = self.clientToken
