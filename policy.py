@@ -4,6 +4,7 @@ import mathHelper
 import numpy as np
 import copy
 
+from msvcrt import getch
 from interpreter import Interpreter
 
 PROJECTILE_DAMAGE = 100
