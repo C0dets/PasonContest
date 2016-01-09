@@ -98,6 +98,9 @@ class Policy:
 
             if self.lastThreat <= threatGrid[i]:
                 i = self.lasti
+            
+            direction = 0
+            myNewAngle = 0
 
             if i == self.lasti and i!= 0:
                 direction = self.lastDirection
@@ -134,8 +137,6 @@ class Policy:
                 myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
 
             else:
-                direction = 0
-                myNewAngle = 0
                 myTank['predictedPosition'] = myTank['position']
 
             self.lastDirection = direction
