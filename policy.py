@@ -4,8 +4,11 @@ import mathHelper
 import numpy as np
 import copy
 
-from msvcrt import getch
+import curses
 from interpreter import Interpreter
+stdscr = curses.initscr()
+curses.cbreak()
+stdscr.keypad(1)
 
 PROJECTILE_DAMAGE = 100
 PROJECTILE_RANGE = 100
@@ -24,20 +27,18 @@ class Policy:
 
     def newStatus(self, status):
         # Do key sensing
-        key = ord(getch())
-        if key == 13:
+        key = stdscr.getch()
+        if key == ord('m'):
             if self.moveToCenter:
                 self.moveToCenter = False
             else:
                 self.moveToCenter = True
-        elif key == 224:
-            key = ord(getch())
-            if key == 72:
-                self.predictionFactor += 0.1
-                print 'predictionFactor: ', self.predictionFactor
-            elif key == 80:
-                self.predictionFactor -= 0.1
-                print 'predictionFactor: ', self.predictionFactor
+        elif key == curses.KEY_UP:
+            self.predictionFactor += 0.1
+            print 'predictionFactor: ', self.predictionFactor
+        elif key == curses.KEY_DOWN:
+            self.predictionFactor -= 0.1
+            print 'predictionFactor: ', self.predictionFactor
 
 
         if (not self.processStatus(status)):
