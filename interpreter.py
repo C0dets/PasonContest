@@ -158,7 +158,7 @@ class Interpreter:
 
     def obstacleInWay(self, position, size):
         for terrain in self.mapTerrain:
-            if mathHelper.circleOnRect(terrain['boundingBox']['corner'], terrain['boundingBox']['size'], position, size):
+            if mathHelper.rectOnCircle(terrain['boundingBox']['corner'], terrain['boundingBox']['size'], position, size):
                 return True
         return False
 

@@ -105,7 +105,7 @@ def getLineEndpoint(lineStart, lineLength, lineAngle):
 
     return [lineStart[0]+x,lineStart[1]+y]
 
-def rectOnLine(lineStart, lineEnd, rectStartPoint, rectDimensions):
+def rectOnLine(rectStartPoint, rectDimensions, lineStart, lineEnd):
 
     Ax = lineStart[0]
     Ay = lineStart[1]
@@ -138,7 +138,7 @@ def rectOnLine(lineStart, lineEnd, rectStartPoint, rectDimensions):
 
     return True
 
-def circleOnRect(corner, size, centre, radius):
+def rectOnCircle(corner, size, centre, radius):
     if circleOnLine(corner, [corner[0]+size[0], corner[1]], centre, radius):
         return True
     if circleOnLine(corner, [corner[0], corner[1]+size[1]], centre, radius):
@@ -148,9 +148,3 @@ def circleOnRect(corner, size, centre, radius):
     if circleOnLine([corner[0]+size[0], corner[1]], [corner[0]+size[0], corner[1]+size[1]], centre, radius):
         return True
     return False
-
-
-if __name__ == "__main__":
-    rectPos = [5, 5]
-    rectSize = [5, 5]
-    rectOnLine([9, 1], [15, 6], rectPos, rectSize)
