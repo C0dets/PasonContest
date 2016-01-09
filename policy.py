@@ -112,7 +112,7 @@ class Policy:
                 self.comm.move(myTank['id'], direction, 10)
 
                 predictedDist = self.intp.avgPeriod * myTank['speed']
-    
+
                 myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
 
 
@@ -168,7 +168,7 @@ class Policy:
         # Rotate turret appropriately
         for attacker in usedAttackers:
             # add predicitve factor to rotation
-            angleToRotate = usedAttackers[attacker]['turretChange'] + self.intp.avgPeriod * ROTATION_SPEED
+            angleToRotate = usedAttackers[attacker]['turretChange'] * 2
             self.comm.rotateTurret(attacker, angleToRotate)
 
         return
