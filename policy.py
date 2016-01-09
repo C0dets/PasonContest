@@ -218,8 +218,8 @@ class Policy:
             myCorrelations = sorted(myCorrelations, key=lambda entry:entry['distance'])
             for cor in myCorrelations:
                 if cor['distance'] < PROJECTILE_RANGE + self.intp.avgPeriod * cor['tankB']['speed'] * 2:
-                    cor['targetId'] = cor['tankB']['id']
-                    usedAttackers[attacker] = entry
+                    cor['targetId'] = cor['tankB']['id' ]
+                    usedAttackers[attacker] = cor
 
             # find closest shootable friend and move somewhat close to them  (like 30 away?)
 
