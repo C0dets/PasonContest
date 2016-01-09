@@ -130,10 +130,10 @@ class Policy:
                 myTank['position'] = myTank['predictedPosition']
             for enTank in self.enemyTanks:
                 tempCor = self.intp.correlationAtoB(myTank, enTank)
-                tempCor['turrentChange'] = mathHelper.smallestAngleBetween(myTank['turret'], tempCor['angle'])
+                tempCor['turretChange'] = mathHelper.smallestAngleBetween(myTank['turret'], tempCor['angle'])
                 correlationArr.append(tempCor)
         # Sort the array, smallest abs angle chang first
-        sorted(correlationArr, key=lambda entry:np.absolute(entry['turrentChange']))
+        sorted(correlationArr, key=lambda entry:np.absolute(entry['turretChange']))
 
         remainingAttackers = copy.deepcopy(self.myTankIds)
         usedAttackers = {}
