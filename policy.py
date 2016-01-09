@@ -12,9 +12,9 @@ PROJECTILE_SPEED = 30
 ROTATION_SPEED = 1.5
 
 class Policy:
-    def __init__(self, comm, predictionFactor):
+    def __init__(self, comm):
         self.comm = comm
-        self.predictionFactor = predictionFactor
+        self.predictionFactor = 1.1
         self.intp = Interpreter()
         self.tankPlans = {}
         self.moveToCenter = False
