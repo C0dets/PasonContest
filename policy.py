@@ -70,27 +70,28 @@ class Policy:
     def evade(self):
 
         for myTank in self.myTanks:
-            hreatGrid = np.zeros(7)
+            threatGrid = np.zeros(7)
             for i in range(7):
                 if i == 0:
                     newPosition = myTank['position']
                 else:
-                    angle = 2*np.pi/i
+                    angle = 2*np.pi*i/6
                     newPosition = mathHelper.getLineEndpoint(myTank['position'], 2*myTank['hitRadius'], angle)
                 for projectile in self.intp.projectiles:
                     A = projectile['position']
                     B = mathHelper.getLineEndpoint(A, projectile['range'], projectile['direction'])
-                    if mathHelper.circleOnLine(A, B, newPosition, myTank['hitRadius']):
-                        threatGrid[i] = max(1/projectile['range'], threatGrid[i])
+                    strikeDist = mathHelper.circleOnLine(A, B, newPosition, myTank['hitRadius'])
+                    if strikeDistance != False:
+                        threatGrid[i] = max(1/strikeDist, threatGrid[i])
                 if self.intp.obstacleInWay(newPosition, myTank['collisionRadius']):
                     threatGrid[i] = max(10, threatGrid[i])
 
             i = np.argmin(threatGrid)
 
             if i != 0:
-                reqAngle = 2*np.pi/i
+                reqAngle = 2*np.pi*i/6
                 myAngle = myTank['tracks']
-                diff = myAngle-reqAngle
+                diff = mathHelper.smallestAngleBetween(myAngle, reqAngle)
                 rotationReq = np.arctan(np.sin(diff)/ np.cos(diff))
 
                 self.comm.rotateTank(myTank['id'], rotationReq)
@@ -103,9 +104,9 @@ class Policy:
                     myNewAngle -= 2*np.pi
 
                 if myNewAngle != reqAngle:
-                    direction = "FWD"
-                else:
                     direction = "REV"
+                else:
+                    direction = "FWD"
 
                 self.comm.move(myTank['id'], direction, 2*myTank['hitRadius'])
 
