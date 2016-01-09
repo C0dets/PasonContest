@@ -29,11 +29,10 @@ class Policy:
     def newStatus(self, status):
         # Do key sensing
         key = stdscr.getch()
-        if key == ord('m'):
-            if self.moveToCenter:
-                self.moveToCenter = False
-            else:
-                self.moveToCenter = True
+        if key == curses.KEY_LEFT:
+            self.moveToCenter = False
+        elif key == curses.KEY_RIGHT:
+            self.moveToCenter = True
         elif key == curses.KEY_UP:
             self.predictionFactor += 0.1
             print 'predictionFactor: ', self.predictionFactor
