@@ -168,7 +168,7 @@ class Policy:
         # Rotate turret appropriately
         for attacker in usedAttackers:
             # add predicitve factor to rotation
-            angleToRotate = usedAttackers[attacker]['turretChange'] * 2
+            angleToRotate = usedAttackers[attacker]['turretChange'] * 1.5
             self.comm.rotateTurret(attacker, angleToRotate)
 
         return
