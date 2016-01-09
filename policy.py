@@ -102,7 +102,11 @@ class Policy:
             direction = 0
             myNewAngle = 0
 
-            self.comm.rotateTank(myTank['id'], rotationReq)
+            if i==self.lasti and i!=0:
+                self.comm.rotateTank(myTank['id'], np.pi/2)
+            elif i!=0:
+                self.comm.rotateTank(myTank['id'], -np.pi/2)
+                
 
             while(False):
                 if i == self.lasti and i!= 0:
