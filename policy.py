@@ -173,7 +173,7 @@ class Policy:
         # assign any remaining attackers to enemies
         for attacker in remainingAttackers:
             # Find closest enemy via path finding and assign that enemy
-            myCorrelations = [cor for cor in correlationArr if cor['tankA'] == attacker]
+            myCorrelations = [cor for cor in correlationArr if cor['tankA']['id'] == attacker]
             myCorrelations = sorted(myCorrelations, key=lambda entry:entry['distance'])
             for cor in myCorrelations:
                 remainingAttackers.remove(attacker)
