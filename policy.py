@@ -9,7 +9,7 @@ from interpreter import Interpreter
 stdscr = curses.initscr()
 curses.cbreak()
 stdscr.keypad(1)
-nodelay(stdscr, True)
+stdscr.nodelay(True)
 
 PROJECTILE_DAMAGE = 100
 PROJECTILE_RANGE = 100
