@@ -58,8 +58,8 @@ class Comm:
                 elif (message["comm_type"] == "MATCH_END"):
                     break
                 elif (message["comm_type"] == "GAMESTATE"):
-                    if (latestStatus):
-                        print "Discrading status"
+##                    if (latestStatus):
+##                        print "Discrading status"
                     latestStatus = message
             except zmq.ZMQError:
                 if(latestStatus):

@@ -60,12 +60,12 @@ class Policy:
             self.timeStart = status['timestamp']
         self.timePass = status['timestamp'] - self.timeStart
         if ("map" not in status):
-            print 'missing map'
-            print status
+##            print 'missing map'
+##            print status
             return False
         if ("players" not in status):
-            print 'missing players'
-            print status
+##            print 'missing players'
+##            print status
             return False
 
         self.myTanks = []
