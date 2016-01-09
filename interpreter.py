@@ -31,9 +31,9 @@ class Interpreter:
             'tankB': tankB
             }
         result['distance'] = mathHelper.distanceBetween(tankA['position'], tankB['position'])
-        angle['angle'] = mathHelper.angleFromAToB(tankA['position'], tankB['position'])
+        result['angle'] = mathHelper.angleFromAToB(tankA['position'], tankB['position'])
 
-        return sorted(threats, key=lambda threat:threat['distance'])
+        return result
 
     def canAshootB(self, tank1Id, tank2Id):
         tank1 = self.tanks[tank1Id]
@@ -66,13 +66,13 @@ class Interpreter:
 ##                return False
 
         ## Ensure path is clear of solids
-        if self.isSolidOnLine(tank1['position'], endPoint):
+        if self.isShotClear(tank1['position'], endPoint):
             return False
 
         return True
 
     def whoWouldIShoot(self, tank1):
-        targetId = False
+        target = False
         targetDistance = PROJECTILE_RANGE * 2 ## Just put it at a ridiculous range to start
         ## get the end point for tank1's range
         endPoint = [
@@ -88,14 +88,14 @@ class Interpreter:
             distanceToIntersection = mathHelper.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])
             if (distanceToIntersection != False and distanceToIntersection < targetDistance):
                 targetDistance = distanceToIntersection
-                targetId = tank['id']
+                target = tank
 
         ## Ensure path is clear of solids
-        if self.isSolidOnLine(tank1['position'], endPoint):
+        if self.isShotClear(tank1['position'], endPoint):
             return False
-        return targetId
+        return target
 
-    def isSolidOnLine(self, startPoint, endPoint):
+    def isShotClear(self, startPoint, endPoint):
         for terrain in self.mapTerrain:
             if terrain['type'] == 'SOLID':
                 if mathHelper.rectOnLine(terrain['boundingBox']['corner'], terrain['boundingBox']['size'], startPoint, endPoint):
@@ -145,5 +145,4 @@ class Interpreter:
             if mathHelper.circleOnRect(terrain['boundingBox']['corner'], terrain['boundingBox']['size'], position, size):
                 return True
         return False
-
 
