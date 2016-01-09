@@ -72,7 +72,7 @@ class Interpreter:
         return True
 
     def whoWouldIShoot(self, tank1):
-        targetId = False
+        target = False
         targetDistance = PROJECTILE_RANGE * 2 ## Just put it at a ridiculous range to start
         ## get the end point for tank1's range
         endPoint = [
