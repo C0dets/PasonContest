@@ -15,6 +15,9 @@ class Policy:
     def __init__(self, comm):
         self.comm = comm
         self.intp = Interpreter()
+        self.lasti = 0
+        self.lastDirection = "FWD"
+        self.lastThreat = 0
 
     def newStatus(self, status):
         if (not self.processStatus(status)):
@@ -72,7 +75,6 @@ class Policy:
     if evading the "predictedPosition" for the next update is appended to the tank
     '''
     def evade(self):
-
         for myTank in self.myTanks:
             threatGrid = np.zeros(7)
             for i in range(7):
@@ -92,7 +94,18 @@ class Policy:
 
             i = np.argmin(threatGrid)
 
-            if i != 0:
+            if self.lastThreat <= threatGrid[i]:
+                i = self.lasti
+
+            if i == self.lasti and i!= 0:
+                direction = self.lastDirection
+                self.comm.move(myTank['id'], direction, 2*myTank['hitRadius'])
+
+                predictedDist = self.intp.avgPeriod * myTank['speed']
+
+                myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
+
+            elif i != 0:
                 reqAngle = 2*np.pi*i/6
                 myAngle = myTank['tracks']
                 diff = mathHelper.smallestAngleBetween(myAngle, reqAngle)
@@ -117,6 +130,10 @@ class Policy:
                 predictedDist = self.intp.avgPeriod * myTank['speed']
 
                 myTank['predictedPosition'] = mathHelper.getLineEndpoint(myTank['position'], predictedDist, myNewAngle)
+
+            self.lastDirection = direction
+            self.lasti = i
+            self.lastThreat = threatGrid[i]
 
 
 
