@@ -88,7 +88,7 @@ class Policy:
                 enemyThreats = self.intp.getThreatsToA(myTank, self.enemyTanks)
                 for enemyTank in enemyThreats:
                     if self.intp.canAshootB(enemyTank['tank']['id'], myTank['id']):
-                        strikeDist = mathHelper.distanceBetween(myTank['position']+myTank['hitRadius'], enemyTank['tank']['position'])
+                        strikeDist = mathHelper.distanceBetween(myTank['position'], enemyTank['tank']['position'])
                         threatGrid[i] = max(1/strikeDist, threatGrid[i])
                 for projectile in self.intp.projectiles:
                     A = projectile['position']
@@ -103,7 +103,7 @@ class Policy:
 
             if self.lastThreat <= threatGrid[i]:
                 i = self.lasti
-            
+
             direction = 0
             myNewAngle = 0
 
