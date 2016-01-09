@@ -160,5 +160,17 @@ class Interpreter:
         for terrain in self.mapTerrain:
             if mathHelper.rectOnCircle(terrain['boundingBox']['corner'], terrain['boundingBox']['size'], position, size):
                 return True
+        mapLeft = 0
+        mapRight = self.mapSize[0]
+        mapBottom = 0
+        mapTop = self.mapSize[1]
+        if mathHelper.circleOnLine([mapLeft,mapBottom], [mapLeft,mapTop], position, size):
+            return True
+        if mathHelper.circleOnLine([mapLeft,mapBottom], [mapRight,mapBottom], position, size):
+            return True
+        if mathHelper.circleOnLine([mapLeft,mapTop], [mapRight,mapTop], position, size):
+            return True
+        if mathHelper.circleOnLine([mapRight,mapBottom], [mapRight,mapTop], position, size):
+            return True
         return False
 
