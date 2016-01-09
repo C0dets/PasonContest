@@ -17,12 +17,9 @@ class Policy:
         self.predictionFactor = predictionFactor
         self.intp = Interpreter()
         self.tankPlans = {}
-        self.moveToCenter = False        self.timePass = 0
-        self.timeStart = 0<<<<<<< .mine
-
-=======
+        self.moveToCenter = False
+        self.timePass = 0
         self.timeStart = 0
->>>>>>> .theirs
 
     def newStatus(self, status):
         # Do key sensing
@@ -263,7 +260,7 @@ class Policy:
         return
 
     def escapeShrinking(self):
-        centre = [self.intp.mapSize[0]/2, self.intp.mapSize[1]/2] 
+        centre = [self.intp.mapSize[0]/2, self.intp.mapSize[1]/2]
         for myTank in self.myTanks:
             reqAngle = mathHelper.angleFromAToB(myTank['position'], centre)
             myAngle = myTank['tracks']
