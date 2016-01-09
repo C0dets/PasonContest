@@ -142,7 +142,7 @@ def circleOnRect(corner, size, centre, radius):
         return True
     if circleOnLine(corner, [corner[0], corner[1]+size[1]], centre, radius):
         return True
-    if circleOnLine([corner[0], corner[1]+size[1], [corner[0]+size[0], corner[1]+size[1]], centre, radius):
+    if circleOnLine([corner[0], corner[1]+size[1]], [corner[0]+size[0], corner[1]+size[1]], centre, radius):
         return True
     if circleOnLine([corner[0]+size[0], corner[1]], [corner[0]+size[0], corner[1]+size[1]], centre, radius):
         return True
