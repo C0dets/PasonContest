@@ -1,6 +1,7 @@
 from __future__ import division
 import math
 import mathHelper
+import numpy as np
 
 PROJECTILE_RANGE = 100
 
@@ -10,6 +11,7 @@ class Interpreter:
         self.period = 0.10002
         self.avgPeriod = 0.10002
         self.statusUpdates = 0
+        self.aimInc = 0
         return
 
     ## Should wipe memory of previous game
@@ -96,7 +98,7 @@ class Interpreter:
             # Don't consider self
             if (tank['id'] == tank1['id']):
                 continue
-            distanceToIntersection = mathHelper.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'])
+            distanceToIntersection = mathHelper.circleOnLine(tank1['position'], endPoint, tank['position'], tank['hitRadius'] + self.aimInc)
             if (distanceToIntersection != False and distanceToIntersection < targetDistance):
                 targetDistance = distanceToIntersection
                 target = tank
