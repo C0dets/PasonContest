@@ -116,9 +116,9 @@ def rectOnLine(lineStart, lineEnd, rectStartPoint, rectDimensions):
     rectRight = rectStartPoint[0]+rectDimensions[0]
     rectLeft = rectStartPoint[0]
 
-    if np.max(Ax, Bx) < rectLeft or np.min(Ax, Bx) > rectRight:
+    if np.maximum(Ax, Bx) < rectLeft or np.minimum(Ax, Bx) > rectRight:
         return False
-    if np.max(Ay, By) < rectBottom or np.min(Ay, By) > rectTop:
+    if np.maximum(Ay, By) < rectBottom or np.minimum(Ay, By) > rectTop:
         return False
 
     if (Bx == Ax):
