@@ -71,22 +71,22 @@ class Policy:
 
         for myTank in self.myTanks:
             for i in range(7):
-                angle = 2*np.pi/i
                 if i == 0:
                     newPosition = myTank['position']
                 else:
+                    angle = 2*np.pi/i
                     newPosition = getLineEndpoint(myTank['position'], myTank['hitRadius'], angle)
                 for projectile in self.intp.projectiles:
                     A = projectile['position']
                     B = mathHelper.getLineEndpoint(A, projectile['range'], projectile['direction'])
                     if mathHelper.circleOnLine(A, B, newPosition, myTank['hitRadius']):
                         threatGrid[i] = max(1/projectile['range'], threatGrid[i])
-            
+
                 if self.intp.wallInWay(newPosition, myTank['collisionRadius']):
                     threatGrid[i] = max(10, threatGrid[i])
 
             i = np.min(threatGrid)
-        
+
             if i != 0:
                 reqAngle = 2*np.pi/i
                 myAngle = myTank['tracks']
@@ -95,7 +95,7 @@ class Policy:
 
                 self.comm.rotateTank(myTank['id'], rotationReq)
 
-                myNewAngle = myAngle+rotationReq            
+                myNewAngle = myAngle+rotationReq
 
                 if myNewAngle < 0:
                     myNewAngle += 2*np.pi
