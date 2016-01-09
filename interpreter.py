@@ -48,7 +48,7 @@ class Interpreter:
             distance = mathHelper.distanceBetween(tankA['position'], enTank['position'])
             if (distance < dangerousRange):
                 ## Check if obstacles in the way
-                if not self.isSolidOnLine(tankA['position'], enTank['position']):
+                if not self.isShotClear(tankA['position'], enTank['position']):
                     threats.append({'tank': enTank, 'distance': distance})
         return sorted(threats, key=lambda threat:threat['distance'])
 
