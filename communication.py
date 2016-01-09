@@ -77,9 +77,9 @@ class Comm:
 ##        print 'sent'
         message = json.loads(self.commandChannel.recv())
 ##        print 'recieved'
-        if (message["comm_type"] == "ErrorResp"):
-            print command
-            print message
+##        if (message["comm_type"] == "ErrorResp"):
+##            print command
+##            print message
 
     def move(self, tankId, direction, distance):
         command = {
